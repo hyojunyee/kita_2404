@@ -1,7 +1,5 @@
 identifiers = ["var1", "2things", "variabel_name", "time!"]
 
-import keyword
-
 def extract_valid_identifiers(identifiers):
     valid_identifiers = []
     for identifier in identifiers:
