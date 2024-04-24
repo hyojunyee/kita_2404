@@ -3,8 +3,6 @@ identifiers = ["var1", "2things", "variabel_name", "time!"]
 def extract_valid_identifiers(identifiers):
     valid_identifiers = []
     for identifier in identifiers:
-        if not identifier:
-            continue
         if identifier[0].isdigit():
             continue
         is_valid = all(char.isalnum() or char == '_' for char in identifier)
@@ -17,4 +15,6 @@ print(valid_identifiers)
 
 #identifiers에서 유효한 변수값을 찾는 문제
 #일단 함수를 정의해준다. 값은 identifiers에서 받아온다.
-#유효값을 
+#유효값을 찾기위해서는 일단 리스트를 불러와야된다. * list는 대괄호를 쓴다.
+#for을 써서 위에 리스트의 값을 반복해준다.
+
