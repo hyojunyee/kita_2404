@@ -1,0 +1,18 @@
+identifiers = ["var1", "2things", "variabel_name", "time!"]
+
+import keyword
+
+def extract_valid_identifiers(identifiers):
+    valid_identifiers = []
+    for identifier in identifiers:
+        if not identifier:
+            continue
+        if identifier[0].isdigit():
+            continue
+        is_valid = all(char.isalnum() or char == '_' for char in identifier)
+        if is_valid and identifier not in keyword.kwlist:
+            valid_identifiers.append(identifier)
+    return valid_identifiers
+
+valid_identifiers = extract_valid_identifiers(identifiers)
+print(valid_identifiers)
