@@ -14,3 +14,7 @@ def extract_valid_identifiers(identifiers):
 
 valid_identifiers = extract_valid_identifiers(identifiers)
 print(valid_identifiers)
+
+#identifiers에서 유효한 변수값을 찾는 문제
+#일단 함수를 정의해준다. 값은 identifiers에서 받아온다.
+#유효값을 
