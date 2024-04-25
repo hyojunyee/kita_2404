@@ -1,0 +1,40 @@
+과제 1
+numbers = [58, 45, 69, 19, 4, 87, 29, 13, 39, 15]
+max_value = max(numbers)
+min_value = min(numbers)
+print(max_value, min_value)
+
+
+과제 2
+numbers = [58, 45, 69, 19, 4, 87, 29, 13, 39, 15]
+sum_value = sum(numbers)
+avg_value = sum_value / len(numbers)
+print(sum_value)
+print(avg_value)
+
+
+과제 3 - 함수를 어떻게 쓸지 아직 잘모르겠다....
+items = ['apple', 'banana', 'cherry', 'apple', 'cherry', 'apple']
+target = 'apple'
+
+def shooting_target(items):
+  apple_list = []
+  for item in items:
+    if items == 'apple':
+     return apple_list
+
+apple_list = shootingtarget(items)
+print(apple_list)
+
+
+과제 4 - 아직 수준에서 풀기 너무 힘들다...
+
+
+과제 5 - 답이랑 같은 값은 구할 수 있겠지만, 이 방향은 아닌듯 함.
+list1 = [1, 2, 3, 4, 5]
+k = 2
+
+# for if 쓰기
+tailnumber = list1[:3]
+forenumber = list1[3:]
+print(forenumber + tailnumber)
