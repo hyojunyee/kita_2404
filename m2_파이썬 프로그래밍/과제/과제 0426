@@ -1,1 +1,68 @@
-ㅇ
+과제 1
+
+data = [1, 2, 2, 3, 4, 4, 4, 5]
+
+uniq_num = set(data)
+print(len(uniq_num))
+
+
+과제 2
+
+# 예시 입력: list1 = [1, 2, 3, 4, 5], list2 = [4, 5, 6, 7, 8]
+# 예시 출력: [4, 5]
+
+def union(list1, list2):
+  return set(list1) & set(list2)
+
+list1 = [1, 2, 3, 4, 5]
+list2 = [4, 5, 6, 7, 8]
+union_list = union(list1,list2)
+print(union_list)
+
+
+과제 3
+
+
+
+과제 4
+
+
+
+과제 5
+
+
+
+과제 6
+
+class Calculator:
+# 두 파라메타값의 덧셈
+  def add(self, n1, n2):
+    return n1 + n2
+# 두 파라메타값의 뺄셈
+  def subt(self, n1, n2):
+    return n1 - n2
+# 두 파라메타값의 곱셈
+  def mul(self, n1, n2):
+    return n1 * n2
+# 두 파라메타값의 나눗셈
+  def div(self, n1, n2):
+    if n1 == 0 or n2 == 0:
+      return "Error : Division by zero"
+    else:
+      return round(n1 / n2)
+
+obj1 = Calculator()
+print(obj1.add(1,2))
+obj2 = Calculator()
+print(obj2.subt(3,4))
+obj3 = Calculator()
+print(obj3.mul(5,9))
+obj4 = Calculator()
+print(obj1.div(9,3))
+obj4 = Calculator()
+print(obj1.div(2,0))
+
+
+과제 7
+
+
