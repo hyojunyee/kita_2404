@@ -116,4 +116,20 @@ print(obj1.div(2,0))
 
 과제 7
 
+text = input("텍스트를 입력하세요 : ")
+# 문장을 단어 단위로 분리합니다.
+words = text.split()
+#단어를 저장할 딕셔너리를 생성합니다.
+word_frequency = {}
+for word in words:
+  # 대소문자를 구분하지 않기 위해 단어를 소문자로 변환합니다.
+  word = word.lower()
 
+  # 딕셔너리에 단어가 이미 존재한다면 빈도수를 1 증가시키고,
+  # 존재하지 않는다면 새로운 항목으로 추가합니다.
+  if word in word_frequency:
+    word_frequency[word] += 1  # 복합대입연산자 i = i + a
+  else:
+    word_frequency[word] = 1
+
+print(word_frequency)
