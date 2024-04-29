@@ -1,0 +1,87 @@
+Task1_0429.
+
+input_str = "Hello, world! How are you today? I am fine. Thank You!"
+["'Hello', 'world', 'How', 'are', 'you', 'today', 'I', 'am', 'fine', 'Thank', 'you'"]
+
+import re
+input_str = "Hello, world! How are you today? I am fine. Thank You!"
+words = re.split("[ ,.!?]", input_str)
+print(words)
+
+
+Task2_0429. 십진수 122를 2진수, 8진수, 16진수로 변경하여 출력하세요.
+
+n1 = format(122, 'b')
+n2 = format(122, 'o')
+n3 = format(122, 'x')
+print(n1)
+print(n2)
+print(n3)
+
+Task3_0429. 두 수의 곱셈 결과를 계산하고, 그 결과에 10을 더하세요.
+
+i = 11 * 3
+i += 10
+print(i)
+
+
+Task4_0429. 주어진 리스트에서 두 번째 요소를 삭제하고, 마지막에 새로운 요소 'Python'을 추가하세요.
+리스트: ['Java', 'C', 'JavaScript']
+
+list1 = ['Java', 'C', 'JavaScript']
+del list1[1]
+list1.append('Python')
+print(list1)
+
+
+Task5_0429. 주어진 문자열에서 처음 세 글자와 마지막 세 글자를 연결하여 새로운 문자열을 만드세요.
+문자열: 'Incredible'
+
+string = 'Incredible'
+fro_str = string[:3]
+bhi_str = string[-3:]
+new_str = fro_str + bhi_str
+print(new_str)
+
+
+Task6_0429. 사용자의 이름과 이메일을 딕셔너리로 저장하고, 이름을 입력받아 해당하는 이메일을 출력하세요.
+사용자 정보: 이름 - 'Alice', 이메일 - 'alice@example.com'
+
+
+
+Task7_0429. 주어진 두 튜플에서 공통 요소만을 찾아 집합으로 만드세요.
+튜플: (1, 2, 3, 4, 5)와 (4, 5, 6, 7, 8)
+
+t1 = (1, 2, 3, 4, 5)
+t2 = (4, 5, 6, 7, 8)
+
+t1_set = set(t1)
+t2_set = set(t2)
+
+print(t1_set & t2_set)
+
+
+Task8_Challenge_0429. 다음 요구 사항을 충족하는 프로그램을 작성하세요:
+
+사용자로부터 이름, 나이, 좋아하는 색상을 입력받습니다.
+입력받은 정보를 딕셔너리로 저장하고, 모든 사용자 정보를 리스트에 저장합니다.
+이름이 'John'인 사용자의 정보만 출력하세요.
+전체 사용자의 평균 나이를 계산하고 출력하세요.
+사용자 데이터:
+이름: John
+나이: 28
+좋아하는 색상: Blue
+사용자 데이터:
+이름: Alice
+나이: 24
+좋아하는 색상: Red
+사용자 데이터:
+이름: Maria
+나이: 32
+좋아하는 색상: Green
+
+
+
+
+
+
