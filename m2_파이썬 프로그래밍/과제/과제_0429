@@ -11,12 +11,21 @@ print(words)
 
 Task2_0429. 십진수 122를 2진수, 8진수, 16진수로 변경하여 출력하세요.
 
-n1 = format(122, 'b')
-n2 = format(122, 'o')
-n3 = format(122, 'x')
-print(n1)
-print(n2)
-print(n3)
+decimal_number = 122
+binary_number = bin(decimal_number)
+print("2진수 : ", binary_number)
+octal_number = oct(decimal_number)
+print("8진수 : ", octal_number)
+hexadecimal_number = hex(decimal_number)
+print("16진수 : ", hexadecimal_number)
+
+# 오답, 앞에 진법 표시도 나오지 않고, 그냥 숫자만 나옴
+# n1 = format(122, 'b')
+# n2 = format(122, 'o')
+# n3 = format(122, 'x')
+# print(n1)
+# print(n2)
+# print(n3)
 
 Task3_0429. 두 수의 곱셈 결과를 계산하고, 그 결과에 10을 더하세요.
 
@@ -80,7 +89,22 @@ Task8_Challenge_0429. 다음 요구 사항을 충족하는 프로그램을 작�
 나이: 32
 좋아하는 색상: Green
 
+users = []
+for _ in range(3):
+  name = input("이름을 입력하세요 : ")
+  age = int(input("나이를 입력하세요: "))
+  favorite_color = input("좋아하는 색상을 입력하세요: ")
 
+  user_info = {'name' : name, 'age' : age, 'favorite_color' : favorite_color}
+  users.append(user_info)
+
+for user in users:
+  if user['name'] == 'John':
+    print(f'John\'s info: {user}')
+
+total_age = sum(user['age'] for user in users)
+average_age = total_age / len(users)
+print(f'Average age of users : {average_age:.2f}')
 
 
 
