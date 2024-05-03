@@ -20,6 +20,39 @@ ask2_0502. 현재 계절 구분 프로그램
 각 계절별 출력 멘트는 계절에 맞게 창작
 if 조건문으로 datetime 모듈을 import해서 datetime.now 함수를 사용해서 작성
 
+from datetime import datetime
+spring = [3, 4, 5]
+summer = [6, 8, 7]
+autumn = [9, 10, 11]
+wintter = [12, 1, 2]
+
+today = datetime.now()
+month = today.month
+if month in spring:
+  print("쌔싹이 돋아나는 봄이 왔습니다.")
+elif month in summer:
+  print("바캉스의 계절 여름이 왔습니다.")
+elif month in autumn:
+  print("독서의 계절 가을이 왔습니다")
+else:
+  print("연말 연초의 겨울이 왔습니다.")
+
+
+# 다른 풀이방법
+# import datetime
+
+# t= datetime.datetime.now()
+
+# print('지금 우리가 지내는 계절은 어디쯤 있나요?')
+# if t.month<12 and t.month>=9:
+#   print('단풍이 지천을 물들이는 계절, 가을입니다.')
+# elif t.month<9 and t.month>=6:
+#   print('작열하는 태양과 신록이 공존하는 계절, 여름입니다.')
+# elif t.month<6 and t.month>=3:
+#   print('벚꽃 나들이가 설래는 봄입니다.')
+# else:
+#   print('살고싶으면 장롱에 히트텍 꺼내, 겨울입니다')
+
 
 
 Task3_0502. 1부터 99까지 아래와 같이 2개의 수를 곱해서 가장 큰 수를 구하세요.
@@ -33,6 +66,37 @@ for num1, num2 in zip(i,j):
   if result > max_result:
     max_result = result
 print(f'최대값 = {max_result}')
+
+# 다른 풀이 방법
+max_value = 0
+for i in range(1,100):
+  if max_value >= (i*(100-i)):
+    continue
+  else:
+    max_value = i*(100-i)
+print(max_value)
+
+# 또 다른 풀이법
+n = 1
+result = 0
+while n <= 100:
+  a = n*(100-n)
+  if a > result:
+    result = a
+    n += 1
+  else:
+    n += 1
+    continue
+print(result)
+
+# 입력값 없고, 출력값만 있는 형태의 사용자 함수 만들어서 풀기
+def findBiggestOne():
+  biggestNum = 0
+  for i, j in zip(range(1,100), range(99,0,-1)):
+    if i * j > biggestNum:
+      biggestNum = i*j
+  return biggestNum
+print(findBiggestOne())
 
 
 
@@ -54,13 +118,50 @@ print(output)
 
 # [[1,4,7],[2,5,8],[3,6,9]]
 
+# 다른 풀이방법
+# numbers = [1,2,3,4,5,6,7,8,9]
+# output = [[], [], []]
+# for num in numbers:
+#   if num % 3 == 1:
+#     output[0].append(num)
+#   elif num % 3 == 2:
+#     output[1].append(num)
+#   else:
+#     output[2].append(num)
+#   print(output)
+
+# 다른 풀이방법
+# numbers = [1,2,3,4,5,6,7,8,9]
+# output = [[], [], []]
+
+# for number in numbers:
+#   output[(number-1)%3].append(number)
+# print(output)
 
 
 Task5_0502. 주어진 리스트에서 중복된 요소를 제거하고, 남은 요소만을 포함하는 새 리스트를 반환합니다. 순서는 유지해야 합니다.
 
+#앞 순서부터 잘 됨
+input_list = [8, 6, 7, 2, 1, 4, 6, 3, 5, 2, 2, 1]
+output_list = []
+
+for item in input_list:
+    if item not in output_list:
+        output_list.append(item)
+
+print(output_list)
+
+# 뒤에 순서? 대로 정렬됨
 input_list = [1, 2, 2, 3, 4, 4, 4, 5, 6, 7, 7]
-new_list = list(set(input_list))
-print(new_list)
+for i in input_list:
+  if input_list.count(i) > 1:
+    input_list.remove(i)
+print(input_list)
+
+# 지금의 list에는 순서가 유지되어 있어서 변함이 없지만, set을 쓰게되면 순서가 정렬된다
+# input_list = [1, 2, 2, 3, 4, 4, 4, 5, 6, 7, 7]
+# new_list = list(set(input_list))
+# print(new_list)
 
 
 
@@ -68,9 +169,52 @@ Task6_0502. 주어진 문자열을 모스 코드로 변환하는 함수를 작�
 
 input_text = "Hello World"
 
+morse_code = {
+        'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+        'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+        'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+        'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+        'Y': '-.--', 'Z': '--..'
+    }
+input_text = "Hello World"
+result = ""
+
+for char in input_text:
+  if char.upper() in morse_code:
+    result += morse_code[char.upper()]
+print(result)
 
 
 Task7_0502. 주어진 비대칭 m×n 매트릭스(2차원 리스트)에서, 모든 대각선 상의 합을 계산하는 함수를 작성하세요. 결과는 각 대각선의 합을 리스트로 반환해야 합니다.
 
 
+# 강사님 풀이
+def diagonal_sums(matrix):
+    if not matrix:
+        return []
+    m, n = len(matrix), len(matrix[0])
+    # 최대 가능한 대각선 수는 m + n - 1
+    # print(m,n)
+    max_diagonals = m + n - 1
+    result = [0] * max_diagonals
+
+    # 모든 원소를 순회하면서 해당 대각선 인덱스에 값을 더함
+    for i in range(m):
+        for j in range(n):
+            # 대각선 인덱스는 행 인덱스와 열 인덱스의 차의 절댓값
+            diagonal_index = i + j
+            result[diagonal_index] += matrix[i][j]
+
+    return result
+
+# 매트릭스 입력
+input_matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [10, 11, 12]
+]
+
+# 대각선 합 결과 출력
+print(diagonal_sums(input_matrix))
 
