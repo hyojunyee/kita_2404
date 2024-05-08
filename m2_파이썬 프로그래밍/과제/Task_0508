@@ -10,6 +10,11 @@ for i in wiyname.split():
 print(f"당신의 영어 이름의 첫글자를 대문자로 바꾸면 {' '.join(title_name)} 입니다")
 
 
+# 리스트 컴프리헨션 연습
+wiyname = input('이름을 영어로 입력하세요 : ')
+title_name = [i[0].upper() + i[1:] for i in wiyname.split()]
+print(f"당신의 영어 이름의 첫 글자를 대문자로 바꾸면 {' '.join(title_name)}입니다.")
+
 
 Task2_0507. join 함수를 이용해서 ['a','b','c']을 아래와 같이 출력하세요.
 a::b::c
@@ -48,16 +53,27 @@ Task4_0508. 문자와 숫자로만 구성된 아이디만 유효한 규칙을 �
 그렇지 않다면, "아이디는 알파벳과 숫자만 포함할 수 있습니다"라고 메시지를 출력합니다.
 
 
+def make_id(ident):
+    if ident.isalnum():
+        print("유효한 아이디입니다.")
+    else:
+        print("아이디는 알파벳과 숫자만 포함할 수 있습니다.")
+
+user_input = input("아이디를 입력하세요: ")
+make_id(user_input)
 
 
 
 Task5_0508. 코딩을 한줄로 작성해서 동일한 결과를 출력하세요.
+
+
 list = []
 for i in range(0,20,2):
     list.append(i*i)
 print(list)
 
-
+n_list = [i*i for i in range(0,20,2)]
+print(n_list)
 
 
 
@@ -76,13 +92,21 @@ Task7_0508. datetime 객체를 문자열로 변환하는 사용자 함수를 작
 Task8_0508. 올해 경과된 날짜수 계산하세요.
 
 
+# %j 1월 1일부터 경과한 일수 001, 002, ..., 366
+import datetime
+
+now = datetime.datetime.now()
+gone_days = int(now.strftime('%j'))
+print(f'올해 경과된 날짜 수: {gone_days}일')
 
 
 
 Task9_0508. 현재 요일을 "2021-6-26 오늘은 토요일입니다."와 같은 형식으로 출력하세요.
 
 
+# 딕셔너리 활용한 방법
 import datetime
+
 weekend_dick = {
     0 : '월요일',
     1 : '화요일',
@@ -98,6 +122,17 @@ today = now_datetime.strftime('%Y-%m-%d')
 week_number = now_datetime.weekday()
 week_day = weekend_dick[week_number]
 print(f'{today} 오늘은 {week_day}입니다.')
+
+
+# 리스트 활용한 방법
+import datetime
+
+weekday_names = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일']
+now = datetime.datetime.now()
+today = now.strftime('%Y-%m-%d')
+weekday_number = now.weekday()
+
+print(f'{today} 오늘은 {weekday_names[weekday_number]}입니다.')
 
 
 
