@@ -44,15 +44,23 @@ while True:
 
 
 
-
-
 Task4_0508. 문자와 숫자로만 구성된 아이디만 유효한 규칙을 만들려고 한다. 아래 사항을 참조하여 프로그램을 작성하세요.
 사용자로부터 문자열을 입력받습니다.
 입력받은 문자열이 알파벳과 숫자로만 이루어져 있는지 확인합니다.
 만약 조건을 만족한다면 "유효한 아이디입니다"라고 출력합니다.
 그렇지 않다면, "아이디는 알파벳과 숫자만 포함할 수 있습니다"라고 메시지를 출력합니다.
 
+txt = input("문자열 입력 >> ")
 
+ret = txt.isalnum()
+
+if ret == True:
+  print("유효한 아이디입니다 ")
+else:
+  print("아이디는 알파벳과 숫자만 포함할 수 있습니다")
+
+
+# 반복안됨 코딩 수정 필요
 def make_id(ident):
     if ident.isalnum():
         print("유효한 아이디입니다.")
@@ -80,31 +88,59 @@ print(n_list)
 Task6_0508. 유닉스 타임스탬프를 받아서 해당 시간을 datetime.datetime 객체로 변환하고, 그 결과를 출력하는 사용자 함수를 작성하여 임의의 타임스탬프를 입력하여 결과를 출력하세요.
 
 
+def timestamp_to_datetime(timestamp):
+    return datetime.fromtimestamp(timestamp)
+ts = float(input('timestamp를 입력하세요 > '))
+dt = timestamp_to_datetime(ts)
+print(dt)
 
 
 
 Task7_0508. datetime 객체를 문자열로 변환하는 사용자 함수를 작성하여 datetime 객체를 "YYYY-MM-DD HH:MM:SS" 형식의 문자열로 변환하고 출력하세요.
 
 
+from datetime import datetime
+def str_date (date) :
+  return date.strftime('%Y-%m-%d %H:%M:%S')
+
+result = str_date(datetime.now())
+print(result , type(result))
+
+
+import datetime
+def datetime_to_string(dt):
+    return dt.strftime('%Y-%m-%d %H:%M:%S')
+
+dt = input('datetime을 입력하세요> ')
+dt = datetime.datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
+s = datetime_to_string(dt)
+print(s)
 
 
 
 Task8_0508. 올해 경과된 날짜수 계산하세요.
 
 
-# %j 1월 1일부터 경과한 일수 001, 002, ..., 366
 import datetime
 
 now = datetime.datetime.now()
 gone_days = int(now.strftime('%j'))
-print(f'올해 경과된 날짜 수: {gone_days}일')
+print(f'올해 경과된 날짜 수: {gone_days-1}일')
+
+
+import datetime
+
+current_date = datetime.date.today()
+start_of_year = datetime.date(current_date.year, 1, 1)
+days_passed = (current_date - start_of_year).days
+print(f'올해 경과된 날짜 수: {days_passed}일')
 
 
 
 Task9_0508. 현재 요일을 "2021-6-26 오늘은 토요일입니다."와 같은 형식으로 출력하세요.
 
 
-# 딕셔너리 활용한 방법
+# 딕셔너리 활용
 import datetime
 
 weekend_dick = {
@@ -124,16 +160,56 @@ week_day = weekend_dick[week_number]
 print(f'{today} 오늘은 {week_day}입니다.')
 
 
-# 리스트 활용한 방법
+# 리스트 활용
 import datetime
 
 weekday_names = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일']
-now = datetime.datetime.now()
-today = now.strftime('%Y-%m-%d')
-weekday_number = now.weekday()
+
+now_datetime = datetime.datetime.now()
+today = now_datetime.strftime('%Y-%m-%d')
+weekday_number = now_datetime.weekday()
 
 print(f'{today} 오늘은 {weekday_names[weekday_number]}입니다.')
 
 
 
 Task10_0508. 1에서 백만까지 더하는데 걸리는 프로그램 실행 시간을 밀리초(ms) 단위로 구하세요.(1ms=0.001초)
+
+
+import time
+st_time = time.time()
+sum = 0
+i = 1
+while i <= 1000000:
+    sum = sum + i
+    i = i + 1
+fin_time = time.time()
+
+print(f"1 부터 100만까지의 합은 {sum} 입니다")
+print(f"1 부터 100만까지 덧셈에 걸린 시간은 : {round((fin_time - st_time)*1000)}ms 입니다")
+
+
+import time
+
+t1 = time.time()
+t2 = 0
+result = 0
+
+for i in range(1000000):
+    result += i+1
+else:
+    t2 = time.time()
+
+print(f'백만까지 더한 값: {result}\n걸린 시간: {round((t2-t1)*1000)} (ms)')
+
+
+import time
+
+start = time.time()
+sn = sum(range(1, 1000001))
+end = time.time()
+print(f"1에서 백만까지 더하는데 걸린 시간 : {(end - start):.3f}초")
+
+minute, second = divmod((end-start), 60)
+h, m = divmod(minute, 60)
+print(f'{int(h)}시간 {int(minute)}분 {second:.3f}초')
