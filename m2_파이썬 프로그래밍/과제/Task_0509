@@ -23,7 +23,7 @@ for word in words_list:
 sorted_alph_frequency = sorted(alph_frequency.items(), key=lambda x: x[1], reverse=True)
 
 for i, (char, frequency) in enumerate(sorted_alph_frequency[:5], start=1):
-    print(f"{i}위: {char}, 빈도수: {frequency}")
+    print(f"[{char:<1}] -> [{frequency}]회 나타남")
 
 
 
