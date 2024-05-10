@@ -107,8 +107,13 @@ Height: 200\
 Other arguments: {'color': 'red', 'thickness': 5, 'type': 'large'}
 
 
+def func2(Width, Height, **kwargs):
+    print(f'Width: {Width}')
+    print(f'Height: {Height}')
+    print(f'Other arguments: {kwargs}')
 
-
+func2(100,200,color='red',thickness=5)
+func2(100,200,color='red',thickness=5, type='large')
 
 
 
@@ -118,32 +123,49 @@ Width: 100, Height: 200, Color: blue, Thickness: 1\
 Width: 100, Height: 200, Color: red, Thickness: 15
 
 
+def func3(a, b, color='blue', thickness=1):
+    print(f'Width: {a}, Height: {b}, Color: {color}, Thickness: {thickness}')
 
 
+func3(100,200)
+func3(100,200,color='red',thickness=15)
 
 
 
 Task6_0509. 입력으로 들어오는 모든 수의 평균 값을 계산해 주는 함수를 작성한 후 1,2,3을 입력한 결과를 출력하세요.
 
 
+def cal_average(*args):
+    return sum(args) / len(args)
 
-
+print(cal_average(1,2,3))
+print(cal_average(10,20,30,40,50))
 
 
 
 Task7_0509. 원의 면적과 둘레의 길이를 구하는 사용자 함수를 작성하여 반지름이 5와 10일때 면적과 둘레를 구하세요(반올림:round())
 
 
+import math
+def area_circumference(r):
+    area = math.pi*r*r        # math.pi 파이 가져오기
+    circumference = 2*math.pi*r
+    print(f'면적: {round(area,2)}, 둘레: {round(circumference,2)}')
 
-
+area_circumference(5)
+area_circumference(10)
 
 
 
 Task8_0509. 게시물의 총 건수와 한 페이지에 보여 줄 게시물 수를 입력시 총 페이지 수를 출력하는 프로그램을 작성하세요.
 
 
-
-
+# 딱 나누어 떨어지지 않을때, 나누어 떨어지지 않는 게시물을 위한 새로운 한 페이지가 필요하다는 점을 고려
+import math
+total = int(input("총 게시물 수 : "))
+show = int(input("한페이지 보여줄 게시물 수 : "))
+result = math.ceil(total/show)                      # math.ceil 나머지 개시물을 위한 페이지 만들어 주기 위함.
+print(f'총 페이지 수는 {result}입니다.')
 
 
 
@@ -164,8 +186,25 @@ cal('*',1,2,3,4,5)
 cal('+',1,2,3,4,5,6,7)
 
 
+def cal(choice, *args):
+    result = args[0]
+    for i in args[1:]:
+        if choice == '+':
+          result += i
+        elif choice == '-':
+          result -= i
+        elif choice == '*':
+          result *= i
+        elif choice == '/':
+          if i == 0:
+            return print("오류 : 0으로 나눌 수 없습니다.")
+          else:
+            result /= i
+        else:
+            return "계산할 수 있는 기호가 아닙니다."    
+    return result
 
-
-
-
-
+print(cal('*',1,2,3,4,5))
+print(cal('+',1,2,3,4,5,6,7))
+print(cal('-',1,2,3,4,5,6,7))
+print(cal('/',10,3))
