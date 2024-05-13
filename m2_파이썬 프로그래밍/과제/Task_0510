@@ -1,0 +1,212 @@
+Task1_0510. try ~ except, try ~ except ~ finally, try ~ except ~else, try ~ except ~else ~finally 4가지 예외 처리가 필요한 경우에 대해서 코딩을 수행하세요.
+
+
+# 1-1
+try:
+    ans = int(input('정수값을 입력하세요 :'))
+except:
+    print('잘못 입력하셨습니다. 다음에 다시 이용해주세요')
+
+
+# 1-2
+try:
+    ans = int(input('정수값을 입력하세요 :'))
+except:
+    print('잘못 입력하셨습니다. 다음에 다시 이용해주세요')
+finally:
+    print('프로그램을 종료합니다.')
+
+
+# 1-3
+try:
+    ans = int(input('정수값을 입력하세요 :'))
+except:
+    print('잘못 입력하셨습니다. 다음에 다시 이용해주세요')
+else:
+    print(f'오늘의 행운숫자는 {ans}입니다.')
+
+
+# 1-4
+try:
+    ans = int(input('정수값을 입력하세요 :'))
+except:
+    print('잘못 입력하셨습니다. 다음에 다시 이용해주세요')
+else:
+    print(f'오늘의 행운숫자는 {ans}입니다.')
+finally:
+    print('프로그램을 종료합니다.')
+
+
+
+
+
+Task2_0510. 리스트 ['52','273','32','문자','103']에서 숫자 부분만 출력하세요(예외 처리 수행)
+
+
+list1 =  ['52','273','32','문자','103']
+new_list = []
+for i in list1:
+    try:
+        new_list.append(int(i))
+    except:
+        pass
+print(new_list)
+
+
+
+
+
+Task3_0510. 두가지 시나리오를 예외처리를 하여 코드 작업을 수행하세요
+
+정수를 입력하면 > '예외 발생하지 않음' > '프로그램 종료'
+정수를 입력하지 않으면 > '정수 아님' > '프로그램 종료'
+
+
+try:
+    n = int(input('정수값을 입력하세요 :'))
+except:
+    print('정수아님')
+else:
+    print(n)
+    print('예외 발생하지 않음')
+finally:
+    print('프로그램 종료.')
+
+
+
+
+
+Task4_0510. 생성자만으로 구성된 클래스를 작성하고 객체 3개를 만들어서 결과를 출력하세요.
+
+
+class Test:
+    def __init__(self,a,b):
+        self.a = a
+        self.b = b
+        print(a+b)
+obj1 = Test(1,2)
+obj2 = Test(3,8)
+obj3 = Test(10,21)
+
+
+
+
+
+Task5_0510. 생성자, 메소드를 모두 포함하는 클래스를 작성하고 객체 3개를 만들어서 결과를 출력하세요
+
+
+class MyCar:
+    def __init__(self,name,color='white',price=2000):
+        self.name = name
+        self.color = color
+        self.price = price
+            
+    def car_sound(self):
+        if self.price > 15000:
+            print('부와아아아')
+        elif self.price > 10000:
+            print('부웅부웅')
+        else:
+            print('털털털털')
+
+a = MyCar('아반떼')
+b = MyCar('페라리','red',17000)
+c = MyCar('벤츠','black',11000)
+
+print(a.name)
+print(b.price)
+print(c.color)
+print()
+a.car_sound()
+b.car_sound()
+c.car_sound()
+
+
+
+
+
+Task6_0510. 여러개의 음식을 주문할 수 있는 주문 시스템을 작성하세요.(클래스 활용 - 객체 지향)
+
+
+class OrderSystem:
+    def __init__(self):
+        self.menu_items = {
+            '1': ("불고기 비빔밥", 12000),
+            '2': ("야채 비빔밥", 8000),
+            '3': ("전주 비빔밥", 10000)
+        }
+        self.set_price = 3000
+        self.orders = {}
+        self.price_total = 0
+
+    def display_menu(self):
+        print("\n♣♣♣ KITA 식당에 오신 것을 환영합니다 ♣♣♣")
+        print("========================================")
+        print("           - 메뉴 -")
+        for key, (name, price) in self.menu_items.items():
+            print(f"  {key}. {name} : {price}원")
+        print("\n  세트 주문시 : 3000원 추가 (세트는 밥과 반찬이 추가됩니다.)")
+        print("========================================")
+
+    def display_order_summary(self):
+        print("\n■장바구니")
+        self.price_total = 0
+        for key, (name, price) in self.menu_items.items():
+            count = self.orders.get((key, False), 0)
+            count_set = self.orders.get((key, True), 0)
+            print(f" {name} {count}개: {count * price}원")
+            print(f" {name} 세트 {count_set}개: {count_set * (price + self.set_price)}원")
+            self.price_total += (count * price) + (count_set * (price + self.set_price))
+        print(f" 총 금액 {self.price_total}원\n")
+
+    def add_order(self, menu_id, is_set):
+        item_name, item_price = self.menu_items[menu_id]
+        if is_set:
+            item_price += self.set_price
+        num = input(f"\n● {item_name}{' 세트' if is_set else ''} 몇 개 주문 하시겠습니까?\n")
+        if num.isdigit() and int(num) > 0:
+            self.orders[(menu_id, is_set)] = self.orders.get((menu_id, is_set), 0) + int(num)
+            print(f"\n{item_name}{' 세트' if is_set else ''} {num}개가 장바구니에 담겼습니다.\n")
+        else:
+            print('★양수만 입력하세요.★')
+
+    def process_order(self):
+        while True:
+            print('★비빔밥 주문 KIOSK★','\n')
+            msg = input("● 주문을 하시겠습니까? (y 또는 n) >> ").strip().lower()
+            if msg == 'y':
+                while True:
+                    self.display_menu()
+                    self.display_order_summary()
+                    choice = input("● 주문할 메뉴를 골라주세요. (불고기 비빔밥:1, 야채 비빔밥:2, 전주 비빔밥:3, 전체 취소:0, 결제:5) >> ").strip().lower()
+                    if choice in self.menu_items:
+                        set_choice = input("\n●3000원을 추가해 세트로 주문하시겠습니까? (일반주문시:n, 세트주문시:y)\n").strip().lower()
+                        if set_choice in ['y', 'n']:
+                            self.add_order(choice, set_choice == 'y')
+                        else:
+                            print('★올바른 선택을 입력하세요 (y 또는 n).★')
+
+                    elif choice == '0':
+                        self.orders.clear()
+                        print('\n모든 주문이 취소되었습니다.')
+
+                    elif choice == '5':
+                        if self.price_total > 0:
+                            print(f'\n●주문하려면 결제해주세요. 결제금액은 {self.price_total}원 입니다.\n')
+                            input("결제를 완료하려면 아무 키나 누르세요...")  # 사용자가 결제를 확인할 수 있도록 입력 대기
+                            print(f"\n총 금액은 {self.price_total}원이 결제 되었습니다. 감사합니다.",'\n')
+                            self.orders.clear()
+                            break
+                        else:
+                            print('★메뉴를 고르고 주문해주세요!★')
+
+                    else:
+                        print('★메뉴의 지정된 숫자로 입력하세요★')
+
+            else:
+                print('감사합니다.')
+                break
+
+if __name__ == "__main__":
+    order_system = OrderSystem()
+    order_system.process_order()
