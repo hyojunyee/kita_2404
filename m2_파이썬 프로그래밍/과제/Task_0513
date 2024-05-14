@@ -10,16 +10,95 @@ Task1_0513 클래스 구성 요소와 관련 아래 사항에 대한 사례를 �
 매직 메서드(특수 메서드)
 
 
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+    def __str__(self):                          # 문자열로 표현할때 사용
+        return f"{self.title} by {self.author}"
+        
+class MyBook(Book):
+    location = 'MyHome'
+    def __init__(self, title, author, price):
+        super().__init__(title, author)         #super()을 사용하여 부모 class에 self.title, self.author 부분을 불러옴
+        self.price = price
+    def how_much(self):
+        return f"나는 {self.title}을 {self.price}원을 주고 샀다."
+
+b1 = MyBook("오발탄","이범선",8500)
+
+print(b1.location)
+print(b1.price)
+print(b1.how_much())
+print(b1)
+
+
 
 
 
 Task2_0513. 두개의 수를 입력한 후 두개의 수에 대한 사칙연산을 수행하세요.(0을 입력한 경우 다시 입력하도록 조치)
 
 
+class Element:
+    def __init__(self, fir, sec):
+        self.fir = fir
+        self.sec = sec
+    def sum(self):
+        result = self.fir + self.sec
+        return result
+    def sub(self):
+        result = self.fir - self.sec
+        return result
+    def mul(self):
+        result = self.fir * self.sec
+        return result
+    def div(self):
+        result = (self.fir / self.sec, 2)
+        return result
 
+while 1:
+    fir = int(input('입력1 > '))
+    sec = int(input('입력1 > '))
+    if fir == 0 or sec == 0:
+        print('0이 아닌 수를 입력하세요')
+    else:
+        element = Element(fir,sec)
+        print(f'덧셈 : {element.sum()}, 뺄셈 : {element.sub()}, 곱셈 : {element.mul()}, 나눗셈: {element.div()}')
+        break
 
 
 
 
 
 Task3_0513. 파이썬 오버라이딩, 오버로딩, 다형성의 사례를 만들어 보세요.
+
+
+class Robot:
+    def __init__(self, name):
+        self.name = name
+        print(f'안녕! 나는 {self.name}이야')
+    def helping(self):
+        print("도움을 드릴 수 없습니다.")
+class ServingRobot(Robot):
+    # 오버라이딩
+    def helping(self):
+        print("음식을 가져다 드릴 수 있습니다.")
+    def move(self, table):
+        print(f"{table}번 테이블로 음식을 가져다 드렸습니다.")
+class CleaningRobot(Robot):
+    # 유사 오버로딩
+    def helping(self, how = "청소기"):
+        print(f"{how}로 청소를 합니다.")
+# 다형성
+def robot_mode(robot):
+    robot.helping()
+# 객체 생성
+robobo = ServingRobot('robobo')
+roboti = CleaningRobot('roboti')
+# 오버라이딩 사용
+robobo.helping()
+# 오버로딩 사용
+roboti.helping()
+# 다형성을 통한 메서드 호출
+robot_mode(robobo)
+robot_mode(roboti)
