@@ -1,0 +1,152 @@
+Task1_0516. '199305, 1923A, a93247'에서 '199305'만 출력하세요.
+
+
+# 1
+pattern = r'^\d+'
+str1 = '199305, 1923A, a93247'
+p = re.match(pattern, str1)
+print(p.group())
+
+
+# 2
+p = re.compile(r'^\d+')
+str1 = '199305, 1923A, a93247'
+
+result = p.search(str1)
+
+if result:
+  print(result.group())
+
+
+
+
+
+Task2_0516. '99food234, a93456\n, a9356ba '에서 '99food234'만 출력하세요.
+
+
+# 1
+pattern = r'^\d+\w+\d+'
+data = '99food234, a93456\n, a9356ba '
+p = re.match(pattern, data)
+print(p.group())
+
+
+# 2
+p = re.compile(r'^\d+\w+\d+')
+data = '99food234, a93456\n, a9356ba '
+
+result = p.search(data)
+if result:
+    print(result.group())
+
+
+
+
+
+Task3_0516. 주어진 문자열이 유효한 이메일 주소인지 확인 "example@example.com"
+
+
+# 1
+p = r'\w+@\w+\.com'
+str1 = "example@example.com"
+
+if re.match(p, str1):
+    print("유효한 이메일 주소입니다.")
+else:
+    print("유효하지 않은 이메일 주소입니다.")
+
+
+# 2
+p = re.compile(r'\w+@\w+\.\w{2,3}$')
+str1 = "example@example.com"
+result = p.search(str1)
+# print(result)
+if result:
+    print("유효한 이메일 주소입니다.")
+else:
+    print("유효하지 않은 이메일 주소입니다.")
+
+
+
+
+
+Task4_0516. 주어진 문자열이 올바른 전화번호 형식(010-0000-0000)인지 확인하세요. "010-1234-5678"
+
+
+# 1
+p = r'\d{3}-\d{4}-\d{4}'
+phone_number = '010-1234-5678'
+
+if re.match(p, phone_number):
+    print("올바른 전화번호 형식입니다.")
+else:
+    print("올바르지 않은 전화번호 형식입니다.")
+
+
+# 2
+p = re.compile(r'\d{3}-\d{4}-\d{4}')
+phone_number = '010-1234-5678'
+
+result = p.search(phone_number)
+if result:
+  print("올바른 전화번호 형식입니다.")
+else:
+  print("올바르지 않은 전화번호 형식입니다.")
+
+
+
+
+
+Task5_0516. 문자열에서 모든 HTML 태그를 찾아 리스트로 반환하세요. ""
+
+
+strings = "<html><head></head><body></body></html>"
+pattern = r'<[^<>]*html[^<>]*>'
+matches = re.findall(pattern, strings)
+print(matches)
+
+
+Task6_0516. 주어진 비밀번호가 최소 8자, 대문자, 소문자, 숫자, 특수문자를 포함하는지 확인하세요. "Aa1!aaaa"
+
+
+
+
+
+
+Task7_0516. 주어진 문자열이 유효한 URL인지 확인하세요. "https://www.example.com"
+
+
+
+
+
+Task8_0516. 주어진 문자열이 유효한 주민등록번호(######-#######) 형식인지 확인하세요. "900101-1234567"
+
+
+
+
+
+Task9_0516. 주어진 문자열이 유효한 IPv4 주소인지 확인하세요.
+
+
+
+
+
+Task10_0516. 주어진 파일 이름에서 확장자가 .jpg, .jpeg, 또는 .png인지 확인하세요. "image.jpg"
+
+
+
+
+
+
+Task11_0516. 문자열에서 Python 주석을 제거하세요. code_with_comments = """
+
+
+
+
+
+Task12_0516. 지정된 HTML 문자열 내에서 이메일 주소를 찾아서 그 결과를 출력 html = """
+
+
+
+
+
