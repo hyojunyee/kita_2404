@@ -18,6 +18,12 @@ if result:
   print(result.group())
 
 
+# 강사님 풀이
+regex = re.compile(r'^\d+')
+mo = regex.findall('199305, 1923A, a93247')
+print(mo)
+
+
 
 
 
@@ -40,10 +46,26 @@ if result:
     print(result.group())
 
 
+# 강사님풀이
+# \w+ : 하나 이상의 영문자나 숫자 (단어 문자)
+# \d : 숫자 한 개
+regex = re.compile(r'^\w+\d+')
+regex.findall('99food234, a93456\n, a9356ba ')
+
+
 
 
 
 Task3_0516. 주어진 문자열이 유효한 이메일 주소인지 확인 "example@example.com"
+
+
+# 강사님풀이
+# 기본적인 이메일형식은 자주쓰이므로 중요함.
+def is_valid_email(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+
+is_valid_email("example@example.com")
 
 
 # 1
@@ -71,6 +93,15 @@ else:
 
 
 Task4_0516. 주어진 문자열이 올바른 전화번호 형식(010-0000-0000)인지 확인하세요. "010-1234-5678"
+
+
+# 강사님 풀이
+def is_valid_phone(phone):
+    pattern = r'^010-\d{4}-\d{4}$'
+    return bool(re.match(pattern, phone))
+
+is_valid_phone('010-1234-5678')
+
 
 
 # 1
@@ -101,13 +132,21 @@ Task5_0516. 문자열에서 모든 HTML 태그를 찾아 리스트로 반환하�
 
 
 strings = "<html><head></head><body></body></html>"
-pattern = r'<[^<>]*html[^<>]*>'
+pattern = r'<[^>]+>'       # < 다음 [^>] >가 아닌것이 오고, 다음에 >가 온다
 matches = re.findall(pattern, strings)
 print(matches)
 
 
 Task6_0516. 주어진 비밀번호가 최소 8자, 대문자, 소문자, 숫자, 특수문자를 포함하는지 확인하세요. "Aa1!aaaa"
 
+
+import re
+def is_strong_password(password):
+    # pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+    pattern = r'[(a-z)+(A-Z)+\d+(\d\W\S)+]{8,}'
+    return bool(re.match(pattern, password))
+
+is_strong_password('Aa1!aaaa')
 
 
 
@@ -116,10 +155,25 @@ Task6_0516. 주어진 비밀번호가 최소 8자, 대문자, 소문자, 숫자,
 Task7_0516. 주어진 문자열이 유효한 URL인지 확인하세요. "https://www.example.com"
 
 
+def is_valid_url(url):
+    pattern =  r'^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$'
+    return bool(re.match(pattern, url))
+
+is_valid_url("https://www.example.com")
+
+
+
 
 
 
 Task8_0516. 주어진 문자열이 유효한 주민등록번호(######-#######) 형식인지 확인하세요. "900101-1234567"
+
+
+def is_valid_id(id):
+    pattern =  r'^\d{2}[01][0-9][0123][0-9]-[1234]\d{6}$'
+    return bool(re.match(pattern, id))
+
+is_valid_id('900101-1234567')
 
 
 
@@ -128,11 +182,36 @@ Task8_0516. 주어진 문자열이 유효한 주민등록번호(######-#######) 
 Task9_0516. 주어진 문자열이 유효한 IPv4 주소인지 확인하세요.
 
 
+def is_valid_ip(ip):
+    pattern = re.compile(r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
+    return bool(re.match(pattern, ip))
+
+test_ips = [
+    "192.168.0.1",
+    "255.255.255",
+    "192.168.1",
+    "192.168.1.300",
+    "abc.def.ghi.jkl"
+]
+
+for ip in test_ips:
+    if is_valid_ip(ip):
+        print(f"{ip} is a valid IP address")
+    else:
+        print(f"{ip} is a invalid IP address")
+
+
 
 
 
 Task10_0516. 주어진 파일 이름에서 확장자가 .jpg, .jpeg, 또는 .png인지 확인하세요. "image.jpg"
 
+
+def is_valid_file(filename):
+    pattern =  r'.*\.(jpg|jpeg|png)$'
+    return bool(re.match(pattern, filename))
+
+is_valid_file("image.jpg")
 
 
 
@@ -141,12 +220,41 @@ Task10_0516. 주어진 파일 이름에서 확장자가 .jpg, .jpeg, 또는 .png
 Task11_0516. 문자열에서 Python 주석을 제거하세요. code_with_comments = """
 
 
+def remove_comments(code):
+    pattern =  r'#.*'  # #으로 시작하고 그 뒤에 어떤문자든 0개 이상(*) 올 수 있는 문자열
+    return re.sub(pattern, '',code, flags=re.MULTILINE)
+
+# 예시 사용    
+code_with_comments = """
+# This is a whole line comment
+print("Hello, world!")  # This is a side comment
+# Another comment
+print("Python is fun!") # Another side comment
+"""
+
+clean_code = remove_comments(code_with_comments)
+print(clean_code)
+
+
 
 
 
 Task12_0516. 지정된 HTML 문자열 내에서 이메일 주소를 찾아서 그 결과를 출력 html = """
 
 
+def find_emails(content):
+    """ 웹 페이지 내용에서 이메일 주소를 찾습니다. """
+    pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+    emails = re.findall(pattern, content)
+    return emails
 
+# 예시 사용
+html = """
+<ul>
+  <li>Email: example@example.com</li>
+  <li>Contact: contact@sample.org</li>
+</ul>
+"""
 
-
+emails = find_emails(html)
+print("찾은 이메일 주소:", emails)
