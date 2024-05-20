@@ -18,16 +18,6 @@ WHERE price >= 10000 AND price <= 20000;
 SELECT * FROM book
 WHERE price BETWEEN 10000 AND 20000;
 
---Task1_0517. 출판사가 '굿스포츠' 혹은 '대한미디어'인 도서를 검색하시오.(3가지 방법)
-SELECT * FROM book WHERE (publisher='굿스포츠') OR (publisher='대한미디어');
-SELECT * FROM book WHERE publisher LIKE '굿스포츠' OR publisher LIKE '대한미디어';
-SELECT * FROM book WHERE publisher IN ('굿스포츠', '대한미디어');
-
---Task2_0517. 출판사가 '굿스포츠' 혹은 '대한미디어'가 아닌 도서를 검색하시오.
-SELECT * FROM book WHERE publisher!='굿스포츠' AND publisher!='대한미디어';
-SELECT * FROM book WHERE publisher<>'굿스포츠' AND publisher<>'대한미디어';
-SELECT * FROM book WHERE publisher NOT IN ('굿스포츠', '대한미디어');
-
 --LIKE는 정확히 '축구의 역사'와 일치하는 행만 선택
 SELECT bookname, publisher From book
 WHERE bookname LIKE '축구의 역사';
