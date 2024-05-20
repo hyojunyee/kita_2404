@@ -1,7 +1,11 @@
 --Task1_0517. 출판사가 '굿스포츠' 혹은 '대한미디어'인 도서를 검색하시오.(3가지 방법)
-SELECT * FROM book WHERE (publisher='굿스포츠') OR (publisher='대한미디어');
+SELECT * FROM book WHERE (publisher='굿스포츠') OR (publisher='대한미디어');         --소괄호는 생략해도됨.
 SELECT * FROM book WHERE publisher LIKE '굿스포츠' OR publisher LIKE '대한미디어';
 SELECT * FROM book WHERE publisher IN ('굿스포츠', '대한미디어');
+
+SELECT * FROM book WHERE (publisher='굿스포츠')
+UNION --두 명령어를 합침.
+SELECT * FROM book WHERE (publisher='대한미디어');
 
 --Task2_0517. 출판사가 '굿스포츠' 혹은 '대한미디어'가 아닌 도서를 검색하시오.
 SELECT * FROM book WHERE publisher!='굿스포츠' AND publisher!='대한미디어';
@@ -9,26 +13,52 @@ SELECT * FROM book WHERE publisher<>'굿스포츠' AND publisher<>'대한미디�
 SELECT * FROM book WHERE publisher NOT IN ('굿스포츠', '대한미디어');
 
 --Task3_0517. 축구에 관한 도서 중 가격이 20,000원 이상인 도서를 검색하시오.
-SELECT * From book WHERE bookname LIKE '%축구%' and price >= 20000;
+SELECT * From book WHERE bookname LIKE '%축구%' AND price >= 20000;
 
 --Task4_0517. 2번 김연아 고객이 주문한 도서의 총 판매액을 구하시오.
-SELECT custid, SUM(saleprice) AS "총 판매액"
+
+SELECT customer.name, orders.custid, SUM(orders.saleprice) AS "총 판매액"
+FROM orders, customer
+WHERE orders.custid = 2 and orders.custid = customer.custid
+GROUP BY customer.name, orders.custid;
+
+SELECT customer.name, orders.custid, SUM(orders.saleprice) "총 판매액" --AS 생략가능
 FROM orders
-WHERE custid = 2
-GROUP BY custid;
+INNER JOIN customer ON orders.custid = customer.custid
+WHERE orders.custid = 2
+GROUP BY customer.name, orders.custid;
+
+SELECT customer.name, orders.custid, COUNT(orders.orderid) AS "도서수량", SUM(orders.saleprice) AS "총 판매액"
+FROM orders, customer
+WHERE orders.custid = 2 and orders.custid = customer.custid
+GROUP BY customer.name, orders.custid;
+
+SELECT customer.name, orders.custid, COUNT(orders.orderid) AS "도서수량", SUM(orders.saleprice) AS "총 판매액"
+FROM orders
+INNER JOIN customer ON orders.custid = customer.custid
+WHERE orders.custid = 2
+GROUP BY customer.name, orders.custid;
 
 --Task5_0517. 가격이 8,000원 이상인 도서를 구매한 고객에 대하여 고객별 주문 도서의 총 수량을 구하시오. 
 --단, 두 권 이상 구매한 고객만 구하시오.
 
-SELECT custid, COUNT(*) AS 도서수량 FROM orders
+SELECT custid, COUNT(*) AS 도서수량
+FROM orders
 WHERE saleprice >= 8000
 GROUP BY custid
-HAVING COUNT(*) >= 2
-ORDER BY custid;
+HAVING COUNT(*) >= 2       --그룹별로 카운트가 된 다음에 조건을 확인 해야되니까 HAVING COUNT 조건은 뒤에 옴.
+ORDER BY custid;           --id 순으로 정렬까지 가능.
+
+--SELECT custid, COUNT(*) AS 도서수량 FROM orders WHERE saleprice >= 8000
+--GROUP BY custid HAVING COUNT(*) >= 2 ORDER BY custid;
+
+
 
 --Task6_0517. 고객의 이름과 고객이 주문한 도서의 판매가격을 검색하시오.
 
-SELECT custid, saleprice FROM orders ORDER BY custid,saleprice;
+SELECT name, saleprice
+FROM customer, orders
+WHERE customer.custid = orders.custid;
 
 --Task7_0517. 고객별로 주문한 모든 도서의 총 판매액을 구하고, 고객별로 정렬하시오.
 
@@ -36,3 +66,9 @@ SELECT custid, SUM(saleprice) AS "총 판매액"
 FROM orders
 GROUP BY custid
 ORDER BY custid;
+
+SELECT name, SUM(saleprice) AS "총 판매액"
+FROM customer C, orders O
+WHERE C.custid = O.custid
+GROUP BY C.name
+ORDER BY C.name;
