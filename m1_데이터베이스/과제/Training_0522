@@ -1,0 +1,76 @@
+--[실습]
+--- 현재 hr에 있는 7개 테이블들을 분석해서 인사관리에 의미있는 인사이트 5개 이상을 기술하세요.
+--- 인사관리 개선을 위한 KPI(목표) 2개를 설정하고 이것들을 테이블들의 데이터에 반영한 후 다시 분석해서 반영 여부를 검증하세요.
+
+--Insight_1. 부서별 평균급여를 구하고, 평균 급여보다 낮은 사람들을 구한다.
+--이 데이터를 KPI 목표치를 달성한 사람의 급여를 조정하는데 참고 할 수 있다.
+SELECT 
+    D.DEPARTMENT_NAME AS "부서",
+    E.FIRST_NAME || ' ' || E.LAST_NAME AS "이름", 
+    E.SALARY AS "급여", 
+    ROUND(MONTHS_BETWEEN(SYSDATE, E.HIRE_DATE) / 12, 1) AS "경력(년)",
+    AvgSal."부서별 평균 급여",
+    AvgSal."부서별 평균 경력(년)"
+FROM 
+    EMPLOYEES E
+JOIN 
+    DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+JOIN
+    (SELECT 
+         D.DEPARTMENT_ID, 
+         ROUND(AVG(E.SALARY)) AS "부서별 평균 급여",
+         ROUND(AVG(MONTHS_BETWEEN(SYSDATE, E.HIRE_DATE) / 12), 1) AS "부서별 평균 경력(년)"
+     FROM 
+         EMPLOYEES E
+     JOIN 
+         DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+     GROUP BY 
+         D.DEPARTMENT_ID) AvgSal ON E.DEPARTMENT_ID = AvgSal.DEPARTMENT_ID
+WHERE 
+    E.SALARY < AvgSal."부서별 평균 급여"
+ORDER BY 
+    D.DEPARTMENT_NAME, E.SALARY DESC, "급여";
+
+--Insight_2. 각 퇴직자가 있는 부서의 평균 근속년수.
+--지금은 Job_history 데이터가 많이 없어서(퇴직자가 많이 없어서) 유의미한 통계는 아니지만,
+--데이터가 쌓이면 부서별로 인원 충족에 도움을 줄 수 있다.
+SELECT 
+    JH.DEPARTMENT_ID,
+    D.DEPARTMENT_NAME,
+    ROUND(AVG(MONTHS_BETWEEN(JH.END_DATE, JH.START_DATE) / 12), 1) AS "평균 근속 년수(년)"
+FROM 
+    JOB_HISTORY JH
+JOIN 
+    DEPARTMENTS D ON JH.DEPARTMENT_ID = D.DEPARTMENT_ID
+GROUP BY 
+    JH.DEPARTMENT_ID, D.DEPARTMENT_NAME;
+
+--Insight_3. 직원들의 근무지 파악.
+--직원들이 근무하는 근무지를 한눈에 볼 수 없으니, 한눈에 파악하는 테이블을 만들어서, 활용 할 수 있다.
+SELECT 
+    E.employee_id,
+    E.FIRST_NAME || ' ' || E.LAST_NAME AS "이름",
+    L.STREET_ADDRESS || ', ' || L.CITY || ', ' || C.COUNTRY_NAME AS "근무지"
+FROM 
+    EMPLOYEES E
+JOIN 
+    DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+JOIN 
+    LOCATIONS L ON D.LOCATION_ID = L.LOCATION_ID
+JOIN 
+    COUNTRIES C ON L.COUNTRY_ID = C.COUNTRY_ID;
+
+
+--Insight_4. 직원들의 근속년수를 파악
+SELECT 
+    E.employee_id,
+    E.FIRST_NAME || ' ' || E.LAST_NAME AS "이름",
+    ROUND(MONTHS_BETWEEN(SYSDATE, E.HIRE_DATE) / 12, 1) AS "근속년수"
+FROM 
+    EMPLOYEES E
+JOIN 
+    DEPARTMENTS D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+JOIN 
+    LOCATIONS L ON D.LOCATION_ID = L.LOCATION_ID
+JOIN 
+    COUNTRIES C ON L.COUNTRY_ID = C.COUNTRY_ID;
