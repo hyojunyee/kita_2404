@@ -1,0 +1,174 @@
+--[실습 - 2인 1조]
+--학교관리를 위하여 테이블 2개 이상으로 db를 구축하고 3개 이상 활용할 수 있는 case를 만드세요.
+drop table departments;
+drop table professors;
+drop table students;
+drop table Academic_Warning
+
+
+CREATE TABLE departments (
+    dpid NUMBER PRIMARY KEY,
+    dpname VARCHAR2(100) NOT NULL
+);
+
+CREATE TABLE professors (
+    pfid NUMBER PRIMARY KEY,
+    pfname VARCHAR2(100) NOT NULL,
+    pfaddress VARCHAR2(200),
+    pfphone VARCHAR2(20),
+    pfemail VARCHAR2(100),
+    pfmajor VARCHAR2(100),
+    pfcareer VARCHAR2(200),
+    dpid NUMBER,
+    FOREIGN KEY (dpid) REFERENCES departments(dpid) ON DELETE CASCADE
+);
+
+CREATE TABLE students (
+    stid NUMBER PRIMARY KEY,
+    stname VARCHAR2(100) NOT NULL,
+    staddress VARCHAR2(200),
+    stphone VARCHAR2(20),
+    stemail VARCHAR2(100),
+    stmajor VARCHAR2(100),
+    stminor VARCHAR2(100),
+    stgpa NUMBER,
+    stcircle VARCHAR2(100),
+    dpid NUMBER,
+    FOREIGN KEY (dpid) REFERENCES departments(dpid) ON DELETE CASCADE
+);
+
+--CREATE TABLE Academic_Warning (
+--    awid NUMBER PRIMARY KEY,
+--    awname VARCHAR2(100) NOT NULL,
+--    awaddress VARCHAR2(200),
+--    awphone VARCHAR2(20),
+--    awemail VARCHAR2(100),
+--    awmajor VARCHAR2(100),
+--    awminor VARCHAR2(100),
+--    awgpa NUMBER,
+--    awmeeting DATE,
+--    FOREIGN KEY (awid) REFERENCES students(stid) ON DELETE CASCADE
+--);
+
+-- 학과 데이터
+INSERT INTO departments (dpid, dpname) VALUES (1, 'Computer Science');
+INSERT INTO departments (dpid, dpname) VALUES (2, 'Mathematics');
+INSERT INTO departments (dpid, dpname) VALUES (3, 'Physics');
+INSERT INTO departments (dpid, dpname) VALUES (4, 'Chemistry');
+INSERT INTO departments (dpid, dpname) VALUES (5, 'Biology');
+INSERT INTO departments (dpid, dpname) VALUES (6, 'Engineering');
+INSERT INTO departments (dpid, dpname) VALUES (7, 'Economics');
+INSERT INTO departments (dpid, dpname) VALUES (8, 'English');
+INSERT INTO departments (dpid, dpname) VALUES (9, 'History');
+INSERT INTO departments (dpid, dpname) VALUES (10,'Psychology');
+
+-- 교수 데이터
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (1, 'John Doe', '123 Main St', '555-1234', 'john@example.com', 'Computer Science', '5 years', 1);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (2, 'Jane Smith', '456 Elm St', '555-5678', 'jane@example.com', 'Mathematics', '8 years', 2);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (3, 'Michael Johnson', '789 Oak St', '555-9012', 'michael@example.com', 'Physics', '3 years', 3);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (4, 'Emily Brown', '234 Maple St', '555-3456', 'emily@example.com', 'Chemistry', '10 years', 4);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (5, 'William Taylor', '567 Pine St', '555-7890', 'william@example.com', 'Biology', '6 years', 5);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (6, 'Sophia Wilson', '890 Cedar St', '555-2345', 'sophia@example.com', 'Engineering', '4 years', 6);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (7, 'Alexander Anderson', '123 Elm St', '555-6789', 'alexander@example.com', 'Economics', '7 years', 7);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (8, 'Olivia Martinez', '456 Oak St', '555-0123', 'olivia@example.com', 'English', '9 years', 8);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (9, 'Daniel Hernandez', '789 Maple St', '555-4567', 'daniel@example.com', 'History', '2 years', 9);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (10, 'Isabella Lopez', '234 Cedar St', '555-8901', 'isabella@example.com', 'Psychology', '5 years', 10);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (11, 'Sophie Baker', '789 Oak St', '555-2345', 'sophie@example.com', 'Economics', ' 2years', 7);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (12, 'Andrew Thompson', '456 Pine St', '555-6789', 'andrew@example.com', 'English', '3 years', 8);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (13, 'David Lee', '123 Elm St', '555-3456', 'david@example.com', 'Computer Science', '10 years', 1);
+INSERT INTO professors (pfid, pfname, pfaddress, pfphone, pfemail, pfmajor, pfcareer, dpid) VALUES (14, 'Emily Johnson', '456 Oak St', '555-7890', 'emily@example.com', 'Physics', '7 years', 3);
+
+-- 학생 데이터
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (1, 'Ethan Thomas', '123 Main St', '555-1234', 'ethan@example.com', 'Computer Science', 'None', 3.5, 'Chess Club', 1);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (2, 'Sophia White', '456 Elm St', '555-5678', 'sophia@example.com', 'Mathematics', 'None', 1.8, 'Soccer Club', 2);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (3, 'James Harris', '789 Oak St', '555-9012', 'james@example.com', 'Physics', 'None', 3.9, 'Soccer Club', 3);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (4, 'Ava Martin', '234 Maple St', '555-3456', 'ava@example.com', 'Chemistry', 'None', 3.6, 'Art Club', 4);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (5, 'Mia King', '567 Pine St', '555-7890', 'mia@example.com', 'Biology', 'None', 1.7, 'Art Club', 5);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (6, 'Noah Young', '890 Cedar St', '555-2345', 'noah@example.com', 'Engineering', 'None', 3.4, 'Soccer Club', 6);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (7, 'Emma Lee', '123 Elm St', '555-6789', 'emma@example.com', 'Economics', 'None', 3.3, 'Economics Club', 7);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (8, 'Liam Clark', '456 Oak St', '555-0123', 'liam@example.com', 'English', 'History', 1.2, 'Science Club', 8);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (9, 'Avery Hernandez', '789 Maple St', '555-4567', 'avery@example.com', 'History', 'English', 3.1, 'Chess Club', 9);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (10, 'Charlotte Garcia', '234 Cedar St', '555-8901', 'charlotte@example.com', 'Psychology', 'Sociology', 3.0, 'Chess Club', 10);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (11, 'Benjamin Evans', '567 Willow St', '555-1111', 'benjamin@example.com', 'Computer Science', 'None', 2.6, 'Art Club', 1);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (12, 'Isabella Nelson', '890 Walnut St', '555-2222', 'isabella@example.com', 'Mathematics', 'None', 3.9, 'Science Club', 2);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (13, 'Oliver Brown', '123 Birch St', '555-3333', 'oliver@example.com', 'Physics', 'None', 3.8, 'Chess Club', 3);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (14, 'Emma Martinez', '456 Cedar St', '555-4444', 'emma@example.com', 'Chemistry', 'None', 1.7, 'Science Club', 4);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (15, 'Lucas Wilson', '789 Spruce St', '555-5555', 'lucas@example.com', 'Biology', 'None', 3.5, 'Biology Club', 5);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (16, 'Mia Davis', '234 Oak St', '555-6666', 'mia@example.com', 'Engineering', 'None', 2.4, 'Art Club', 6);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (17, 'Sophia Clark', '567 Maple St', '555-7777', 'sophia@example.com', 'Economics', 'Statistics', 2.6, 'Economics Club', 7);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (18, 'Jackson Lewis', '890 Pine St', '555-8888', 'jackson@example.com', 'English', 'Philosophy', 3.3, 'Psychology Club', 8);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (19, 'Amelia Walker', '123 Fir St', '555-9999', 'amelia@example.com', 'History', 'Political Science', 3.7, 'Chess Club', 9);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (20, 'Liam Robinson', '456 Aspen St', '555-0000', 'liam@example.com', 'Psychology', 'Sociology', 2.8, 'Psychology Club', 10);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (21, 'Evelyn Young', '789 Cypress St', '555-1010', 'evelyn@example.com', 'Computer Science', 'Physics', 3.9, 'Economics Club', 1);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (22, 'Aiden Scott', '234 Beech St', '555-2020', 'aiden@example.com', 'Mathematics', 'Economics', 1.5, 'Art Club', 2);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (23, 'Charlotte Green', '567 Dogwood St', '555-3030', 'charlotte@example.com', 'Physics', 'Chemistry', 3.6, 'Soccer Club', 3);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (24, 'Harper Carter', '890 Hawthorn St', '555-4040', 'harper@example.com', 'Chemistry', 'None', 1.4, 'Art Club', 4);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (25, 'Henry Allen', '123 Holly St', '555-5050', 'henry@example.com', 'Biology', 'None', 3.8, 'Soccer Club', 5);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (26, 'Ella King', '456 Juniper St', '555-6060', 'ella@example.com', 'Engineering', 'None', 2.7, 'Soccer Club', 6);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (27, 'James Hill', '789 Magnolia St', '555-7070', 'james@example.com', 'Economics', 'None', 2.3, 'Soccer Club', 7);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (28, 'Abigail Baker', '234 Poplar St', '555-8080', 'abigail@example.com', 'English', 'None', 3.2, 'Science Club', 8);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (29, 'Benjamin Gonzalez', '567 Redwood St', '555-9090', 'benjamin@example.com', 'History', 'English', 3.1, 'Soccer Club', 9);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (30, 'Chloe Hernandez', '890 Sequoia St', '555-1112', 'chloe@example.com', 'Psychology', 'None', 3.0, 'Art Club', 10);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (31, 'Grace Thompson', '123 Palm St', '555-1113', 'grace@example.com', 'Computer Science', 'None', 3.7, 'Art Club', 1);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (32, 'Jackson Martinez', '456 Willow St', '555-2223', 'jackson@example.com', 'Mathematics', 'None', 3.8, 'Soccer Club', 2);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (33, 'Ava Lee', '789 Birch St', '555-3334', 'ava@example.com', 'Physics', 'None', 3.9, 'Soccer Club', 3);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (34, 'Lucas Perez', '123 Cedar St', '555-4445', 'lucas@example.com', 'Chemistry', 'None', 3.6, 'Soccer Club', 4);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (35, 'Mia Anderson', '456 Pine St', '555-5556', 'mia@example.com', 'Biology', 'Chemistry', 3.5, 'Psychology Club', 5);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (36, 'Ethan Jackson', '789 Oak St', '555-6667', 'ethan@example.com', 'Engineering', 'None', 3.4, 'Soccer Club', 6);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (37, 'Sophia Taylor', '123 Elm St', '555-7778', 'sophia@example.com', 'Economics', 'None', 4.0, 'Psychology Club', 7);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (38, 'Liam Wilson', '456 Spruce St', '555-8889', 'liam@example.com', 'English', 'History', 3.6, 'Soccer Club', 8);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (39, 'Isabella Harris', '789 Maple St', '555-9990', 'isabella@example.com', 'History', 'Political Science', 3.5, 'Chess Club', 9);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (40, 'James Thomas', '123 Redwood St', '555-0001', 'james@example.com', 'Psychology', 'None', 3.4, 'Psychology Club', 10);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (41, 'Olivia Martinez', '456 Dogwood St', '555-1112', 'olivia@example.com', 'Mathematics', 'None', 3.9, 'Soccer Club', 1);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (42, 'Elijah Lopez', '789 Beech St', '555-2223', 'elijah@example.com', 'Mathematics', 'None', 2.8, 'Psychology Club', 2);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (43, 'Emma Garcia', '123 Holly St', '555-3334', 'emma@example.com', 'Physics', 'None', 3.7, 'Psychology Club', 3);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (44, 'Noah Clark', '456 Juniper St', '555-4445', 'noah@example.com', 'Chemistry', 'None', 2.6, 'Soccer Club', 4);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (45, 'Ava Hernandez', '789 Fir St', '555-5556', 'ava@example.com', 'Biology', 'None', 3.5, 'Soccer Club', 5);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (46, 'Oliver Martinez', '123 Poplar St', '555-6667', 'oliver@example.com', 'Engineering', 'None', 3.4, 'Art Club', 6);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (47, 'Charlotte White', '456 Sequoia St', '555-7778', 'charlotte@example.com', 'Economics', 'None', 3.3, 'Psychology Club', 7);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (48, 'Liam Robinson', '789 Aspen St', '555-8889', 'liam@example.com', 'English', 'None', 2.2, 'Soccer Club', 8);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (49, 'Mia Lewis', '123 Cypress St', '555-9990', 'mia@example.com', 'History', 'None', 3.1, 'Science Club', 9);
+INSERT INTO students (stid, stname, staddress, stphone, stemail, stmajor, stminor, stgpa, stcircle, dpid) VALUES (50, 'James Young', '456 Palm St', '555-0001', 'james@example.com', 'Psychology', 'None', 3.0, 'Psychology Club', 10);
+
+-- Academic_Warning 데이터
+--INSERT INTO Academic_Warning(awid, awname, awaddress, awphone, awemail, awmajor, awminor, awgpa) VALUES (1, 'Mia King', '567 Pine St', '555-7890', 'mia@example.com', 'Biology', 'Chemistry', 1.5);
+
+--UPDATE Academic_Warning SET awmeeting = TO_DATE('2024/6/20', 'YYYY/MM/DD') WHERE awmeeting IS Null;
+
+SELECT * FROM departments;
+SELECT * FROM professors;
+SELECT * FROM students;
+
+DELETE FROM professors;
+DELETE FROM students;
+
+--CASE1 지역별로 버스 운용 (5명 이상인 곳 버스 운행 고려)
+SELECT substr(address, 5) AS 공통주소, COUNT(*) AS 명 
+FROM (SELECT staddress AS address FROM students UNION ALL SELECT pfaddress AS address FROM professors)
+GROUP BY substr(address, 5) HAVING COUNT(*) >= 5 ORDER BY 명 DESC;
+
+
+--CASE2 장학생과 경고받을 학생의 점수와 학과 한번에 표시
+SELECT 
+    CASE WHEN stgpa >= 4.0 THEN stname END AS Scholarship,
+    CASE WHEN stgpa <= 2.0 THEN stname END AS Warning, stgpa, stmajor FROM students
+WHERE stgpa >= 4.0 OR stgpa <= 2.0 ORDER BY stgpa DESC;
+
+
+--CASE3 전공만 가지고 있는 사람과 부전공도 같이 가지고 있는 사람의 전공 성적비교
+SELECT '메이져만 들은 학생' AS "비전공의 유무", ROUND(AVG(stgpa), 2) AS avg_gpa FROM students WHERE stminor = 'None'
+UNION ALL
+SELECT '메이저와 마이너 둘다 들은 학생' AS "비전공의 유무", ROUND(AVG(stgpa), 2) AS avg_gpa FROM students WHERE stminor != 'None';
+
+
+--CASE4 동아리별 평균 점수와 인원수를 비교해서 학점이 3.0 이하거나 인원수가 3명 미만인 동아리를 찾는다. (동아리 폐지 경고를 위함)
+SELECT stcircle AS "동아리", ROUND(AVG(stgpa),2) AS "평균학점", COUNT(*) AS "동아리 학생 수" FROM students 
+GROUP BY stcircle HAVING AVG(stgpa) <= 3.0 OR COUNT(*) < 3;
+
+
+--CASE5 학과별 평균점수 구해 가장 우수한 학과와 도움이 필요한 학과 찾기
+SELECT dpname AS 학과, 학과별평균 FROM departments d JOIN (SELECT stmajor AS 학과, ROUND(AVG(stgpa), 2) AS 학과별평균 FROM students GROUP BY stmajor) s ON d.dpname = s.학과 ORDER BY 학과별평균 DESC;
+
+
+--SELECT stmajor AS 학과, ROUND(AVG(stgpa), 2) AS 학과별평균 FROM students GROUP BY stmajor ORDER BY 학과별평균 DESC;
+--SELECT stmajor AS 학과, COUNT(*) AS 명 FROM students GROUP BY stmajor ORDER BY 명 DESC;
