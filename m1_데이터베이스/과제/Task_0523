@@ -1,0 +1,40 @@
+--Task1_0523. 
+--orders라는 테이블을 생성하고, order_id, customer_id, order_date, amount, status라는 속성을 설정하세요.
+--데이터를 5개 입력하세요.
+--입력한 데이터 중 2개를 수정하세요.
+--수정한 데이터를 취소하기 위해 롤백을 사용하세요.
+--3개의 새로운 데이터를 입력하고, 그 중 마지막 데이터 입력만 취소한 후 나머지를 커밋하세요.
+
+-- Step 1: 테이블 생성
+CREATE TABLE orders (
+    order_id NUMBER PRIMARY KEY,
+    customer_id NUMBER,
+    order_date DATE,
+    amount NUMBER,
+    status VARCHAR2(50)
+);
+
+-- Step 2: 데이터 5개 입력
+INSERT INTO orders (order_id, customer_id, order_date, amount, status) VALUES (1, 101, TO_DATE('2023-05-23', 'YYYY-MM-DD'), 250.00, 'Pending');
+INSERT INTO orders (order_id, customer_id, order_date, amount, status) VALUES (2, 102, TO_DATE('2023-05-23', 'YYYY-MM-DD'), 150.00, 'Completed');
+INSERT INTO orders (order_id, customer_id, order_date, amount, status) VALUES (3, 103, TO_DATE('2023-05-23', 'YYYY-MM-DD'), 350.00, 'Shipped');
+INSERT INTO orders (order_id, customer_id, order_date, amount, status) VALUES (4, 104, TO_DATE('2023-05-23', 'YYYY-MM-DD'), 450.00, 'Pending');
+INSERT INTO orders (order_id, customer_id, order_date, amount, status) VALUES (5, 105, TO_DATE('2023-05-23', 'YYYY-MM-DD'), 550.00, 'Cancelled');
+
+-- Step 3: 입력된 데이터 2개 수정
+UPDATE orders SET amount = 275.00 WHERE order_id = 1;
+UPDATE orders SET status = 'Processing' WHERE order_id = 4;
+
+-- Step 4: 롤백 사용
+ROLLBACK;
+
+-- Step 5: 새로운데이터 3개 입력
+INSERT INTO orders (order_id, customer_id, order_date, amount, status) VALUES (6, 106, TO_DATE('2023-05-23', 'YYYY-MM-DD'), 600.00, 'Pending');
+INSERT INTO orders (order_id, customer_id, order_date, amount, status) VALUES (7, 107, TO_DATE('2023-05-23', 'YYYY-MM-DD'), 700.00, 'Completed');
+INSERT INTO orders (order_id, customer_id, order_date, amount, status) VALUES (8, 108, TO_DATE('2023-05-23', 'YYYY-MM-DD'), 800.00, 'Shipped');
+
+-- Step 6: 마지막으로 입력된 데이터 삭제
+DELETE FROM orders WHERE order_id = 8;
+
+-- Step 7: 커밋
+COMMIT;
