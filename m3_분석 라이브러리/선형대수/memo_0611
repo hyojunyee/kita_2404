@@ -32,18 +32,8 @@ z는 선형 변환의 결과입니다.
 일반적인 활성화 함수에는 다음과 같은 것들이 있습니다:
 
 ReLU (Rectified Linear Unit):
-ReLU
-(
-𝑧
-)
-=
-max
-⁡
-(
-0
-,
-𝑧
-)
+ReLU(z)=max(0,z)
+
 ReLU(z)=max(0,z)
 시그모이드 (Sigmoid):
 𝜎
