@@ -32,6 +32,3 @@ Live Server Port 이슈
 포트 사용 중인 프로세스 확인
 netstat -aon | findstr :5500
 프로세스 종료: taskkill /PID 1234 /F
-
-17168
-5424
