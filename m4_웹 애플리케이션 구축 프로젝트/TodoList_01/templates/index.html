@@ -3,20 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Task List</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            <!-- 비동기식으로 작동되도록함.(새로고침을 하면 데이터를 전부 새로가져옴) -->
+            fetch("/tasks")
+            .then((response) => response.json())
+            .then((tasks)=>{
+                const taskList = document.getElementById("task_list");
+                tasks.forEach((task) => {
+                    const li = document.createElement("li");
+                    li.textContent = task.title;
+                    
+                    const editLink = document.createElement("a");
+                    editLink.href = `/edit/${task.id}`;
+                    editLink.textContent = 'Edit';
+                    li.appendChild(editLink);
+
+                    const deleteLink = document.createElement("a");
+                    deleteLink.href = `/delete/${task.id}`;
+                    deleteLink.textContent = 'Delete';
+                    li.appendChild(deleteLink);
+
+                    
+                    taskList.appendChild(li);
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Task List</h1>
     <form method="POST" action="/">
-        <!-- csrf_token은 보안 문제때문에 사용, {{}}중괄호 두개로 변수 설정을 한다. -->
-        <input type="hidden" name="csrf_token" value="{{form.csrf_token._value()}}"/>
+        <!-- csrf_token은 보안 문제때문에 사용, 중괄호 두개로 변수 설정 -->
+        <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value()}}"/>
         <p>
             <label for="title">Title:</label>
             <input type="text" name="title" id="title" size="32" required />
         </p>
-        <p>
-            <input type="submit" value="Add Task" />
-        </p>
+        <p><input type="submit" value="Add Task"/></p>
         <!-- <p>
             <button type="submit">Add</button>
         </p> -->
