@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title> {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <!-- defer 속성은 html 파싱과 동시에 스크립트 파일이 로드 되지만 실행은 html 파싱이 끝난 후에 이루어지도록 함 -->
+    <!-- js/scrpit.js를 링크로 불러와서 실행 -->
+    <script src="{{url_for('static', filename='js/script.js')}}"></script>
+
+  </head>
+  <body>
+    <h1>{% block header %}{% endblock %}</h1>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
