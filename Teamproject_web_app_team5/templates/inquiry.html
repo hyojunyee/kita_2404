@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>책사이트 이름</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{{ url_for('index') }}" class="menu-link">
+                        HOME
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">소개</a>
+                    <ul class="submenu">
+                        <li><a href="/overview">프로젝트 개요</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#">출판사.서점 서비스</a>
+                    <ul class="submenu">
+                        <li><a href="/target_customer">Target Customer</a></li>
+                        <li><a href="/publisher_service">Who's my Customer?</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#">독자 서비스</a>
+                    <ul class="submenu">
+                        <li><a href="/reader_service">책 추천</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('inquiry') }}" class="menu-link">문의 사항</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-title">문의 사항</div>
+                <button class="add-button" id="addTaskButton">등록</button>
+                <button class="add-button" id="cancelButton" style="display: none;">취소</button>
+            </div>
+
+            <form id="addTaskForm" method="POST" action="{{ url_for('inquiry') }}" style="display: none;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <p>
+                    <label for="title">제목</label><br />
+                    {{ form.title(class="input-field") }}
+                    {% for error in form.title.errors %}
+                        <span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </p>
+                <p>
+                    <label for="contents">내용</label><br />
+                    {{ form.contents(class="input-field") }}
+                    {% for error in form.contents.errors %}
+                        <span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </p>
+                <p>
+                    <label for="due_date">작성일</label><br />
+                    {{ form.due_date(class="input-field") }}
+                    {% for error in form.due_date.errors %}
+                        <span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </p>
+                <p>
+                    <input type="submit" value="Add Task" />
+                </p>
+            </form>
+            <table class="post-table">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>{{ post.id }}</td>
+                        <td>{{ post.title }}</td>
+                        <td>{{ post.input_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <!-- 태스크 목록 출력 -->
+            <ul class="task-list" id="task-list">
+                {% for task in tasks %}
+                <li>
+                    <strong>{{ task.title }}</strong><br>
+                    {{ task.contents }}<br>
+                    등록일: {{ task.input_date }}<br>
+                    마감일: {{ task.due_date }}<br>
+                    <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                    <a href="{{ url_for('delete_task', task_id=task.id) }}">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+
+
+    <footer>
+        <p>&copy; 과정명 : 코리아IT아카데미 AI기반 챗봇 및 OCR 개발 전문가 과정 수강생</p>
+        <p>&copy; 제작자 : Team Project 5T : 김홍준, 이도헌, 윤효준</p>
+        <p>&copy; 출처 : 해당 사이트는 교육용이며 YES24, 인터파크도서, KOSIS 자료를 사용하여 제작되었습니다.</p>
+    </footer>
+</body>
+</html>

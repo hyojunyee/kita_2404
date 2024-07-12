@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>책사이트 이름</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{{ url_for('index') }}" class="menu-link">
+                        <img src="{{ url_for('static', filename='logo.png') }}" alt="로고 이미지" style="width: 50px; height: auto;">
+                        HOME
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">소개</a>
+                    <ul class="submenu">
+                        <li><a href="/overview">프로젝트 개요</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">출판사.서점 서비스</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('target_customer') }}">Target Customer</a></li>
+                        <li><a href="{{ url_for('publisher_service') }}">Who's my Customer?</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">독자 서비스</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('reader_service') }}">책 추천</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('inquiry') }}" class="menu-link">문의 사항</a>
+                </li>
+            </ul>
+        </nav>
+        <div id="login-status">
+            <span id="user-greeting"></span>
+            <button id="login-button">로그인</button>
+            <button id="logout-button" style="display: none;">로그아웃</button>
+        </div>
+    </header>
+
+    <main>
+        <h1>Welcome to Book Cafe website!</h1>
+        <p>Here you can find information about Book Information and recommend services.</p>
+        
+        <!-- 로그인 모달 -->
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h1>로그인</h1>
+                <form id="login-form">
+                    <input type="text" id="username" name="username" placeholder="ID" required>
+                    <input type="password" id="password" name="password" placeholder="PW" required>
+                    <button type="submit">로그인</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 회원가입 모달 -->
+        <div id="register-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h1>회원가입</h1>
+                <form id="register-form">
+                    <input type="text" id="reg-username" name="username" placeholder="ID" required>
+                    <input type="password" id="reg-password" name="password" placeholder="PW" required>
+                    <button type="submit">가입하기</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 태스크 추가 폼 -->
+        <div id="addTaskForm" style="display:none;">
+            <form id="addTaskForm">
+                <input type="text" id="task-title" name="title" placeholder="태스크 제목" required>
+                <textarea id="task-contents" name="contents" placeholder="태스크 내용" required></textarea>
+                <input type="date" id="task-due-date" name="due_date" required>
+                <button type="submit">태스크 추가</button>
+                <button type="button" id="cancelButton">취소</button>
+            </form>
+        </div>
+        <button id="addTaskButton">태스크 추가</button>
+
+        <!-- 태스크 리스트 -->
+        <ul id="task-list"></ul>
+    </main>
+
+    <footer>
+        <p>과정명 : 코리아IT아카데미 AI기반 챗봇 및 OCR 개발 전문가 과정 수강생</p>
+        <p> 제작자 : Team Project 5T : 김홍준, 이도헌, 윤효준</p>
+        <p> 출처 : 해당 사이트는 교육용이며 YES24, 인터파크도서, KOSIS 자료를 사용하여 제작되었습니다.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>책사이트 이름</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <!-- HOME 탭과 로고 이미지를 그룹으로 묶음 -->
+                <li class="menu-item">
+                    <a href="{{ url_for('index') }}" class="menu-link">
+                        <img src="{{ url_for('static', filename='logo.png') }}" alt="로고 이미지" style="width: 50px; height: auto;">
+                        HOME
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">소개</a>
+                    <ul class="submenu">
+                        <li><a href="/overview">프로젝트 개요</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">출판사.서점 서비스</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('target_customer') }}">Target Customer</a></li>
+                        <li><a href="{{ url_for('publisher_service') }}">Who's my Customer?</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">독자 서비스</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('reader_service') }}">책 추천</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('inquiry') }}" class="menu-link">문의 사항</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 프로젝트 개요 및 소개 박스 -->
+        <section class="project-section">
+            <h1 class="project-title">프로젝트 개요</h1>
+            <div class="project-description">
+                <p>이 프로젝트의 목적은 ...</p>
+                <p>소개글: ...</p>
+            </div>
+        </section>
+
+        <!-- 그래프 이미지 -->
+        <section class="graph-section">
+            <img src="{{ url_for('static', filename='trends17_19.png') }}" alt="그래프 이미지" class="graph-image">
+        </section>
+    </main>
+
+    <footer>
+      <p>과정명 : 코리아IT아카데미 AI기반 챗봇 및 OCR 개발 전문가 과정 수강생</p>
+      <p>제작자 : Team Project 5T : 김홍준, 이도헌, 윤효준</p>
+      <p>출처 : 해당 사이트는 교육용이며 YES24, 인터파크도서, KOSIS 자료를 사용하여 제작되었습니다.</p>
+  </footer>
+</body>
+</html>

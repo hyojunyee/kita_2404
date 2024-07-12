@@ -1,0 +1,433 @@
+/* style.css */
+
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* 네비게이션 메뉴를 가로로 배치 */
+}
+
+.menu-item {
+    position: relative;
+    margin-right: 20px;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 15px;
+    display: block;
+}
+
+.menu-link:hover {
+    background-color: #555;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%; /* 네비게이션 메뉴 아래에 서브메뉴 배치 */
+    left: 0;
+    background-color: #333;
+    list-style-type: none;
+    padding: 0;
+    width: 200px; /* 서브메뉴 너비 조정 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+}
+
+.submenu li {
+    border-bottom: 1px solid #555;
+}
+
+.submenu li a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.submenu li a:hover {
+    background-color: #575757;
+}
+
+.menu-item:hover .submenu {
+    display: block;
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.menu-box-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.menu-box {
+    width: 300px;
+    height: 500px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    text-align: center;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin: -200px 10px 0; /* 각 menu-box 사이의 간격을 조정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.menu-box img {
+    max-width: 300px;
+    max-height: 500px;
+    margin-bottom: 10px;
+}
+
+.menu-box:hover {
+    background-color: #e0e0e0;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    /* position: fixed; */
+    bottom: 0;
+    width: 100%;
+}
+
+/* publisher_service 서브메뉴 */
+.submenu-container {
+    display: none;
+    margin-top: 10px;
+}
+
+.submenu-item {
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.submenu-item:hover {
+    text-decoration: underline;
+}
+
+/* 문의 사항 섹션 */
+.section-container {
+    width: 80%;
+    margin: auto;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.add-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background-color: #0056b3;
+}
+
+.task-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task-list li {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.task-list li strong {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.task-list li a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.task-list li a:hover {
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------- */
+
+.project-section {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.project-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.project-description p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.graph-section {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 50px; /* 그래프 섹션과 푸터 사이의 간격 조정 */
+}
+
+.graph-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.reader-service-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.recommendation-intro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.recommendation-intro h1 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.recommendation-intro p {
+    font-size: 1.2em;
+    color: #666;
+}
+
+.recommendation-form-container {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.recommendation-form {
+    display: grid;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.recommendation-form button {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.recommendation-form button:hover {
+    background-color: #0056b3;
+}
+
+.recommendation-result {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.recommendation-result h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.recommendation-result ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.recommendation-result li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+/* ------------------------------------------ */
+
+/* 로그인 상태 스타일 */
+#login-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 5px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#login-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#login-form button:hover {
+    background-color: #0056b3;
+}
+
+/* 로그인 모달과 동일한 스타일 적용 */
+#register-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+#register-modal .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 5px;
+}
+
+/* 로그인 폼과 동일한 스타일 적용 */
+#register-form input,
+#register-form button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#register-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#register-form button:hover {
+    background-color: #0056b3;
+}

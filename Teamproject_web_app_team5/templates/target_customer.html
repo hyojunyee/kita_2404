@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>책사이트 이름</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="{{ url_for('index') }}" class="menu-link">
+                        <img src="{{ url_for('static', filename='logo.png') }}" alt="로고 이미지" style="width: 50px; height: auto;">
+                        HOME
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">소개</a>
+                    <ul class="submenu">
+                        <li><a href="/overview">프로젝트 개요</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">출판사.서점 서비스</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('target_customer') }}">Target Customer</a></li>
+                        <li><a href="{{ url_for('publisher_service') }}">Who's my Customer?</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">독자 서비스</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('reader_service') }}">책 추천</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="/reader_service" class="menu-link">문의 사항</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <footer>
+        <p>과정명 : 코리아IT아카데미 AI기반 챗봇 및 OCR 개발 전문가 과정 수강생</p>
+        <p>제작자 : Team Project 5T : 김홍준, 이도헌, 윤효준</p>
+        <p>출처 : 해당 사이트는 교육용이며 YES24, 인터파크도서, KOSIS 자료를 사용하여 제작되었습니다.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>

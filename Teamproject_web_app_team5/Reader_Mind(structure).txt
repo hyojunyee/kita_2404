@@ -1,0 +1,22 @@
+  Reader_Mind/
+│
+├── app.py
+├── config.py
+├── 
+├── 
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── scripts.js
+│  
+├── templates/
+│   ├── index.html
+│   ├── overview.html
+│   ├── publisher_service.html
+│   ├── customer_info.html
+│   ├── target_customer.html
+│   └── reader_service.html
+└── myenv/
+
+
