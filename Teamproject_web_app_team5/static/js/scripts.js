@@ -1,234 +1,70 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Handle menu box click events
-    const menuBoxes = document.querySelectorAll(".menu-box");
-    const optionsContainers = document.querySelectorAll(".options-container");
+$(document).ready(function() {
+  // 메뉴 박스 클릭 이벤트
+  $('.menu-box').on('click', function() {
+      const targetId = $(this).data('target');
+      if (!targetId) return;
 
-    menuBoxes.forEach(function (menuBox) {
-        menuBox.addEventListener("click", function () {
-            const targetId = menuBox.getAttribute("data-target");
-            if (!targetId) return;
-
-            const optionsContainer = document.getElementById(targetId);
-            if (optionsContainer) {
-              optionsContainers.forEach(function (container) {
-                if (container.id !== targetId) {
-                    container.style.display = "none";
-                }
-              });
-              const isVisible = optionsContainer.style.display === "block";
-              optionsContainer.style.display = isVisible ? "none" : "block";
-            }
-        });
-    });
-
-    // Handle option select events
-    const ageSelect = document.getElementById("age-select");
-    const catSelect = document.getElementById("cat-select");
-    const sexSelect = document.getElementById("sex-select");
-    const resultContainer = document.getElementById("resultContainer");
-    const backButton = document.getElementById("backButton");
-    const submitBtn = document.getElementById("submitBtn");
-    const alertBox = document.querySelector(".alert");
-
-    ageSelect.addEventListener("change", function () {
-        const selectedAge = ageSelect.value;
-        showResult(`연령대 선택: ${selectedAge}`);
-    });
-
-    catSelect.addEventListener("change", function () {
-        const selectedCategory = catSelect.value;
-        showResult(`카테고리 선택: ${selectedCategory}`);
-    });
-
-    sexSelect.addEventListener("change", function () {
-        const selectedSex = sexSelect.value;
-        showResult(`성별 선택: ${selectedSex}`);
-    });
-
-    // Function to display result
-    function showResult(resultText) {
-        resultContainer.style.display = "block";
-        document.getElementById("result").innerHTML = resultText;
-    }
-
-    // submit button - publisher_servidce
-    submitBtn.addEventListener("click", function () {
-        alertBox.style.display = "block";
-        resultContainer.style.display = "none";
-    })
-
-    // Back button - 
-    backButton.addEventListener("click", function () {
-        resultContainer.style.display = "none";
-    });
-
-
-    // Function to toggle options container
-    function toggleOptions(container) {
-      const isVisible = container.style.display === "block";
-      container.style.display = isVisible ? "none" : "block";
-  }
-});
-
-// static/js/scripts.js
-document.addEventListener("DOMContentLoaded", function () {
-  const elements = document.querySelectorAll('.fade-in');
-  const options = {
-      threshold: 0.1
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-          if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              observer.unobserve(entry.target);
+      $('.options-container').each(function() {
+          if ($(this).attr('id') !== targetId) {
+              $(this).hide();
           }
       });
-  }, options);
 
-  elements.forEach(element => {
-      observer.observe(element);
-  });
-});
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-// inquiry.html 부분
-document.getElementById('postForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
-    const postList = document.getElementById('postList');
-    const editIndex = document.getElementById('editIndex').value;
-
-    if (editIndex === '') {
-      // New post
-      const newRow = document.createElement('tr');
-      newRow.innerHTML = `
-        <th scope="row">${postList.children.length + 1}</th>
-        <td>${title}</td>
-        <td>${content}</td>
-        <td>${new Date().toLocaleString()}</td>
-        <td>
-          <button class="btn btn-warning btn-sm edit-btn">수정</button>
-          <button class="btn btn-danger btn-sm delete-btn">삭제</button>
-        </td>
-      `;
-      postList.appendChild(newRow);
-    } else {
-      // Edit post
-      const row = postList.children[editIndex];
-      row.children[1].textContent = title;
-      row.children[2].textContent = content;
-      row.children[3].textContent = new Date().toLocaleString();
-      document.getElementById('editIndex').value = '';
-    }
-
-    document.getElementById('title').value = '';
-    document.getElementById('content').value = '';
-  });
-
-  document.getElementById('postList').addEventListener('click', function(event) {
-    if (event.target.classList.contains('edit-btn')) {
-      const row = event.target.parentElement.parentElement;
-      const index = Array.from(row.parentElement.children).indexOf(row);
-      document.getElementById('title').value = row.children[1].textContent;
-      document.getElementById('content').value = row.children[2].textContent;
-      document.getElementById('editIndex').value = index;
-    }
-
-    if (event.target.classList.contains('delete-btn')) {
-      event.target.parentElement.parentElement.remove();
-    }
-  });
-
-  document.getElementById('search').addEventListener('input', function(event) {
-    const searchTerm = event.target.value.toLowerCase();
-    const rows = document.querySelectorAll('#postList tr');
-
-    rows.forEach(row => {
-      const title = row.children[1].textContent.toLowerCase();
-      const content = row.children[2].textContent.toLowerCase();
-      if (title.includes(searchTerm) || content.includes(searchTerm)) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
+      const optionsContainer = $('#' + targetId);
+      if (optionsContainer.length > 0) {
+          optionsContainer.toggle();
       }
-    });
   });
 
-  // target_customer_type2 - sidebar
-// 모든 collapse 영역을 처음에는 닫힌 상태로 설정
-$(document).ready(function() {
+  // 연령대 선택 이벤트
+  $('#age-select').on('change', function() {
+      const selectedAge = $(this).val();
+      showResult(`연령대 선택: ${selectedAge}`);
+  });
+
+  // 카테고리 선택 이벤트
+  $('#cat-select').on('change', function() {
+      const selectedCategory = $(this).val();
+      showResult(`카테고리 선택: ${selectedCategory}`);
+  });
+
+  // 성별 선택 이벤트
+  $('#sex-select').on('change', function() {
+      const selectedSex = $(this).val();
+      showResult(`성별 선택: ${selectedSex}`);
+  });
+
+  // 결과 보기 함수
+  function showResult(resultText) {
+      $('#resultContainer').show();
+      $('#result').html(resultText);
+  }
+
+  // 제출 버튼 클릭 이벤트
+  $('#submitBtn').on('click', function() {
+      $('.alert').show();
+      $('#resultContainer').hide();
+  });
+
+  // 뒤로 가기 버튼 클릭 이벤트
+  $('#backButton').on('click', function() {
+      $('#resultContainer').hide();
+  });
+
+  // 검색 입력 이벤트
+  $('#search').on('input', function() {
+      const searchTerm = $(this).val().toLowerCase();
+      $('#postList tr').each(function() {
+          const title = $(this).children('td:eq(1)').text().toLowerCase();
+          const content = $(this).children('td:eq(2)').text().toLowerCase();
+          if (title.includes(searchTerm) || content.includes(searchTerm)) {
+              $(this).show();
+          } else {
+              $(this).hide();
+          }
+      });
+  });
+
+  // 초기 상태로 모든 collapse 닫기
   $('.collapse').collapse('hide');
 });
-$(document).ready(function() {
-  // 연령대 필터 클릭 이벤트
-  $('.age-filter').on('click', function(e) {
-      e.preventDefault();
-      var filterText = $(this).data('filter');
-      $('#filtered-content').html('<p>선택한 연령대: ' + filterText + '</p>');
-  });
-
-  // 카테고리 필터 클릭 이벤트
-  $('.category-filter').on('click', function(e) {
-      e.preventDefault();
-      var filterText = $(this).data('filter');
-      $('#filtered-content').html('<p>선택한 카테고리: ' + filterText + '</p>');
-  });
-
-  // 성별 필터 클릭 이벤트
-  $('.gender-filter').on('click', function(e) {
-      e.preventDefault();
-      var filterText = $(this).data('filter');
-      $('#filtered-content').html('<p>선택한 성별: ' + filterText + '</p>');
-  });
-});
-
-const express = require('express');
-const fs = require('fs');
-const xlsx = require('xlsx');
-
-const app = express();
-
-// 정적 파일 제공 (예: 클라이언트에서 사용할 HTML, CSS, JavaScript 파일)
-app.use(express.static('public'));
-
-// 엑셀 파일에서 데이터 읽어오기
-app.get('/storedata', (req, res) => {
-    const fileName = 'Store_20240715.xls';
-    const filePath = __dirname + '/' + fileName;
-
-    // 파일이 존재하는지 확인
-    if (!fs.existsSync(filePath)) {
-        res.status(404).send('File not found');
-        return;
-    }
-
-    // 엑셀 파일 읽기
-    const workbook = xlsx.readFile(filePath);
-    const sheetName = workbook.SheetNames[0]; // 첫 번째 시트를 사용
-    const sheet = workbook.Sheets[sheetName];
-    const data = xlsx.utils.sheet_to_json(sheet, { header: 1 });
-
-    // 데이터 전송
-    res.json(data);
-});
-
-// 서버 시작
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-
-

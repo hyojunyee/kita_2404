@@ -57,6 +57,7 @@ header nav {
     width: auto; /* 서브메뉴 너비 자동 조절 */
     min-width: 300px; /* 최소 너비 설정 (옵션) */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    z-index: 3; /* 서브메뉴의 z-index를 설정하여 메인 메뉴 위에 표시 */
 }
 
 .submenu li {
@@ -495,18 +496,64 @@ footer {
     margin-right: 5px;
 }
 
+
+
+/* 지역별, 서울시 서점 지도 스타일 */
+#mapContainer, #seoulMapContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 세로로 가운데 정렬 */
+    align-items: center; /* 가로로 가운데 정렬 */
+    width: 60%;
+    height: 100%;
+    z-index: 2;
+}
+#map, #seoulMap {
+    margin: 0 auto; /* 가운데 정렬 */
+    justify-content: center; /* 세로로 가운데 정렬 */
+    width: 50%;
+    height: 100%;
+}
+
+#backButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
 #modalMap {
-    height: 400px;
+    height: 50px;
 }
 
-/* style.css */
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+.project-description {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
-.fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
+.project-card {
+    flex: 0 1 45%; /* 카드가 두 줄로 정렬되게 설정 */
+    box-sizing: border-box;
+    padding: 20px;
+    margin: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+}
+
+.overview-image {
+    width: 150px; /* 그림의 너비를 조절 */
+    height: auto;
+    float: left; /* 그림을 왼쪽으로 부유시킴 */
+    margin-right: 20px; /* 그림과 텍스트 사이의 간격을 조정 */
+}
+
+/* ------------------------------------------------------------- */
+.central-image {
+    width: 150px; /* 그림의 너비를 조절 */
+    height: auto; /* 이미지의 높이를 자동 조절 */
+    margin-bottom: 200px; /* 아래쪽 간격 추가 */
 }

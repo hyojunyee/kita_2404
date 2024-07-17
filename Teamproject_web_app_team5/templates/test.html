@@ -1,129 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>Leaflet Seoul Districts Example</title>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet 한국 지도 예제</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
     <style>
         #map {
             height: 600px;
+            width: 100%;
         }
-        .legend {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background-color: white;
-            padding: 10px;
-            border: 1px solid #ccc;
-            font-size: 12px;
+        #modalMap {
+            height: 400px;
         }
-        .legend-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .legend-item {
-            margin-bottom: 3px;
-        }
-        .legend-color {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            margin-right: 5px;
-            vertical-align: middle;
+        .popup-chart {
+            width: 300px;
+            height: 200px;
         }
     </style>
 </head>
 <body>
+    <h1>Leaflet Seoul Districts Example</h1>
     <div id="map"></div>
 
-    <div class="legend">
-        <div class="legend-title">인구 수 범례</div>
-        <div class="legend-item"><span class="legend-color" style="background-color: #b10026;"></span> 5,000,000 이상</div>
-        <div class="legend-item"><span class="legend-color" style="background-color: #e31a1c;"></span> 3,000,000 - 5,000,000</div>
-        <div class="legend-item"><span class="legend-color" style="background-color: #fc4e2a;"></span> 2,000,000 - 3,000,000</div>
-        <div class="legend-item"><span class="legend-color" style="background-color: #fd8d3c;"></span> 1,800,000 - 2,000,000</div>
-        <div class="legend-item"><span class="legend-color" style="background-color: #feb24c;"></span> 1,600,000 - 1,800,000</div>
-        <div class="legend-item"><span class="legend-color" style="background-color: #fed976;"></span> 1,400,000 - 1,600,000</div>
-        <div class="legend-item"><span class="legend-color" style="background-color: #ffeda0;"></span> 1,200,000 - 1,400,000</div>
-        <div class="legend-item"><span class="legend-color" style="background-color: #ffffcc;"></span> 1,000,000 - 1,200,000</div>
+    <!-- Modal -->
+    <div class="modal fade" id="seoulModal" tabindex="-1" aria-labelledby="seoulModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="seoulModalLabel">Seoul Districts</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modalMap"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var map = L.map('map').setView([37.5665, 126.9780], 11); // 서울의 중심 좌표로 초기화
+        // 대한민국 지도 생성
+        var map = L.map('map').setView([36.5, 127.5], 7);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        var markers = []; // 마커를 담을 배열
+        // 서울특별시 마커 추가
+        var seoulMarker = L.marker([37.5665, 126.9780]).addTo(map)
+            .bindPopup('서울특별시')
+            .on('click', function() {
+                // 모달 창 띄우기
+                var modal = new bootstrap.Modal(document.getElementById('seoulModal'));
+                modal.show();
 
-        // 서울의 각 구의 중심 좌표 및 이름
-        var seoulDistricts = [
-            { name: '강남구', center: [37.5172, 127.0473] },
-            { name: '강동구', center: [37.5301, 127.1238] },
-            { name: '강서구', center: [37.5658, 126.8225] },
-            { name: '관악구', center: [37.4784, 126.9516] },
-            { name: '광진구', center: [37.5420, 127.0838] },
-            { name: '구로구', center: [37.4954, 126.8874] },
-            { name: '금천구', center: [37.4601, 126.9000] },
-            { name: '노원구', center: [37.6552, 127.0773] },
-            { name: '도봉구', center: [37.6688, 127.0471] },
-            { name: '동대문구', center: [37.5744, 127.0396] },
-            { name: '동작구', center: [37.5125, 126.9395] },
-            { name: '마포구', center: [37.5665, 126.9010] },
-            { name: '서대문구', center: [37.5791, 126.9368] },
-            { name: '서초구', center: [37.4837, 127.0324] },
-            { name: '성동구', center: [37.5635, 127.0365] },
-            { name: '성북구', center: [37.6065, 127.0276] },
-            { name: '송파구', center: [37.5145, 127.1070] },
-            { name: '양천구', center: [37.5270, 126.8560] },
-            { name: '영등포구', center: [37.5208, 126.9134] },
-            { name: '용산구', center: [37.5327, 126.9904] },
-            { name: '은평구', center: [37.6176, 126.9227] },
-            { name: '종로구', center: [37.5720, 126.9840] },
-            { name: '중구', center: [37.5639, 126.9975] },
-            { name: '중랑구', center: [37.6065, 127.0927] }
-        ];
+                // 모달 창에 있는 지도 초기화
+                setTimeout(function() {
+                    initModalMap();
+                }, 500);
+            });
 
-        // 각 구의 마커 생성 및 이벤트 처리
-        seoulDistricts.forEach(district => {
-            var marker = L.marker(district.center, {
-                opacity: 1 // 초기에는 모든 마커를 보이게 설정
-            }).addTo(map);
-            marker.bindPopup('<b>' + district.name + '</b>');
-            markers.push(marker);
-        });
+        // 모달 창에 있는 지도 초기화 함수
+        function initModalMap() {
+            var modalMap = L.map('modalMap').setView([37.5665, 126.9780], 11);
 
-        // 지도 줌 레벨에 따라 마커 숨기기
-        map.on('zoomend', function() {
-            var currentZoom = map.getZoom();
-            if (currentZoom < 12) { // 예시로 12 레벨 이하일 때 마커를 숨깁니다.
-                markers.forEach(marker => {
-                    marker.setOpacity(0); // 줌 레벨이 낮으면 마커 숨기기
-                });
-            } else {
-                markers.forEach(marker => {
-                    marker.setOpacity(1); // 줌 레벨이 높으면 마커 보이기
-                });
-            }
-        });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(modalMap);
 
-        // 인구 수에 따라 색상 결정하기
-        function getColor(population) {
-            return population > 5000000 ? '#b10026' :
-                   population > 3000000 ? '#e31a1c' :
-                   population > 2000000 ? '#fc4e2a' :
-                   population > 1800000 ? '#fd8d3c' :
-                   population > 1600000 ? '#feb24c' :
-                   population > 1400000 ? '#fed976' :
-                   population > 1200000 ? '#ffeda0' :
-                   population > 1000000 ? '#ffffcc' :
-                                           '#ffffff'; // 최소 인구수에 대한 색상
+            // 서울특별시의 구별 데이터 (예시)
+            var districts = [
+                { name: '종로구', lat: 37.573050, lon: 126.979189 },
+                { name: '중구', lat: 37.563569, lon: 126.997776 },
+                // 추가적인 구 데이터...
+            ];
+
+            // 각 구에 마커 추가
+            districts.forEach(function(district) {
+                var marker = L.marker([district.lat, district.lon]).addTo(modalMap)
+                    .bindPopup('<canvas id="chart-' + district.name + '" class="popup-chart"></canvas>')
+                    .on('click', function() {
+                        setTimeout(function() {
+                            showAgeDistributionChart(district.name);
+                        }, 100);
+                    });
+            });
+        }
+
+        // 연령대 분포도 차트 생성 함수
+        function showAgeDistributionChart(districtName) {
+            var ctx = document.getElementById('chart-' + districtName).getContext('2d');
+
+            var data = {
+                labels: ['0-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71+'],
+                datasets: [{
+                    label: districtName + ' 연령대 분포도',
+                    data: [12, 19, 3, 5, 2, 3, 7, 4], // 예시 데이터
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            var options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            };
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: options
+            });
         }
     </script>
 </body>

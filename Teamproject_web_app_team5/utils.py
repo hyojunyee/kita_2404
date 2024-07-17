@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 데이터프레임 로드
-df = pd.read_csv('D:\kdt_240424\workspace\m4_웹애플리케이션구축\Teamproject_web_app_team5\static\data\yes24_bestseller_data_final.csv')
+df = pd.read_csv('static\yes24_bestseller_data_final.csv')
 
 def get_book_recommendations(gender, age):
     # 성별로 1위 카테고리 찾기

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, request, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
@@ -7,13 +7,21 @@ from wtforms.validators import DataRequired
 from datetime import datetime
 from flask import jsonify
 from datetime import datetime
+import folium
+from folium.features import DivIcon
+import json
+import pandas as pd
 from utils import get_book_recommendations
+import csv
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'  # SQLite 데이터베이스 설정
 
 db = SQLAlchemy(app)
+csv_file = 'static/population.csv'
+geojson_file = 'static/TL_SCCO_CTPRVN.json'
+book_csv_file = 'static/book_store.csv'
 
 # Task 모델 정의
 class Task(db.Model):
@@ -50,6 +58,10 @@ def publisher_service():
 def customer_info():
     return render_template('customer_info.html')
 
+@app.route('/books_store_info')
+def books_store_info():
+    return render_template('books_store_info.html')
+
 @app.route('/target_customer')
 def target_customer():
     return render_template('target_customer.html')
@@ -57,6 +69,18 @@ def target_customer():
 @app.route('/reader_service')
 def reader_service():
     return render_template('reader_service.html')
+
+@app.route('/recommend', methods=['POST'])
+def recommend():
+    user_gender = request.form['gender']
+    user_age = int(request.form['age'])
+    result = get_book_recommendations(user_gender, user_age)
+    if result:
+        recommendations = result.split('\n')
+        return jsonify({'recommendations': recommendations})
+    else:
+        return jsonify({'recommendations': ["추천 도서를 찾을 수 없습니다."]})
+
 
 @app.route('/inquiry', methods=['GET', 'POST'])
 def inquiry():
@@ -98,23 +122,7 @@ def get_tasks():
             'due_date': task.due_date.strftime('%Y-%m-%d')
         })
     return jsonify(task_list)
-#----------------------------------------------------------------
 
-@app.route('/recommend', methods=['POST'])
-def recommend():
-    user_gender = request.form['gender']
-    user_age = int(request.form['age'])
-    result = get_book_recommendations(user_gender, user_age)
-    if result:
-        recommendations = result.split('\n')
-        return jsonify({'recommendations': recommendations})
-    else:
-        return jsonify({'recommendations': ["추천 도서를 찾을 수 없습니다."]})
-
-
-
-#----------------------------------------------------------------------------------------
- 
 @app.route('/edit/<int:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id):
     task = Task.query.get_or_404(task_id)
@@ -133,6 +141,36 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
     return redirect(url_for('inquiry'))
+
+
+# 데이터프레임으로 CSV 파일 로드
+df = pd.read_csv(csv_file, encoding='utf-8')
+# GeoJSON 파일 로드
+with open(geojson_file, encoding='utf-8') as f:
+    geojson_data = json.load(f)
+
+@app.route('/ttt')
+def ttt():
+    return render_template('ttt.html')
+
+#  지도, 인구수 데이터 불러오기
+@app.route('/geojson')
+def get_geojson():
+    return jsonify(geojson_data)
+
+@app.route('/population')
+def get_population():
+    return jsonify(df.to_dict(orient='records'))
+
+# 서점 데이터 불러오기
+with open('static/book_store.json', 'r', encoding='utf-8') as f:
+    book_store_data = json.load(f)
+
+@app.route('/bookstoredata')
+def bookstore_data():
+    return jsonify(book_store_data)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
