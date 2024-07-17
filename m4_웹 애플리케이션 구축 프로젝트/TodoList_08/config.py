@@ -1,0 +1,4 @@
+SECRET_KEY = 'aaa14d6b6fdb01883ef2fc812267145a9c96b3796eb68a35'
+# SQLALCHEMY_DATABASE_URI = 'sqlite:///tasks.db'
+SQLALCHEMY_DATABASE_URI = "mysql://kita1:kita1@localhost:3306/kita1_db"
+SQLALCHEMY_TRACK_MODIFICATIONS = False
