@@ -1,26 +1,21 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from flask import Flask, render_template, request, redirect, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, DateField
 from wtforms.validators import DataRequired
 from datetime import datetime
-from flask_wtf.csrf import CSRFProtect
-from werkzeug.security import generate_password_hash, check_password_hash
-from form import TaskForm, LoginForm, RegistrationForm
-from models import db, Task, User
-
-# ----------------------------------------------------------------
+from flask import jsonify
+from datetime import datetime
+from utils import get_book_recommendations
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'd204225bde25be0ac91acab24e358b16e26f41a8282b411c'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_pyfile("config.py")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'  # SQLite 데이터베이스 설정
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-csrf = CSRFProtect(app)
 
+# Task 모델 정의
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -28,66 +23,11 @@ class Task(db.Model):
     input_date = db.Column(db.DateTime, default=datetime.utcnow)
     due_date = db.Column(db.Date, nullable=False)
 
+# WTForms를 사용한 작업 추가 폼 정의
 class TaskForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    contents = TextAreaField('Contents', validators=[DataRequired()])
-    due_date = DateField('Due Date', validators=[DataRequired()], format='%Y-%m-%d')
-
-@app.before_request
-def create_admin():
-    with app.app_context():
-        if not User.query.filter_by(username='admin').first():
-            admin = User(username='admin', is_admin=True)
-            admin.set_password('admin')
-            db.session.add(admin)
-            db.session.commit()
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        # 사용자명 중복 확인
-        existing_user = User.query.filter_by(username=form.username.data).first()
-        if existing_user:
-            flash(
-                "Username already exists. Please choose a different username.", "danger"
-            )
-            return render_template("register.html", form=form)
-        username = form.username.data
-        password = form.password.data
-        user = User(username=username)
-        user.set_password(password)
-        db.session.add(user)
-        db.session.commit()
-        flash("Registration successful. Please log in.", "success")
-        return redirect(url_for("login"))
-    return render_template("register.html", form=form)
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and check_password_hash(user.password, form.password.data):
-            session['user_id'] = user.id
-            session['username'] = user.username
-            session['is_admin'] = user.is_admin
-            flash('Login successful', 'success')
-            return redirect(url_for('index'))
-        else:
-            flash('Invalid username or password', 'danger')
-    return render_template('login.html', form=form)
-
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    flash('You have been logged out', 'success')
-    return redirect(url_for('login'))
-
-#----------------------------------------------------------------
+    title = StringField('제목', validators=[DataRequired()])
+    contents = TextAreaField('내용', validators=[DataRequired()])
+    due_date = DateField('마감일', validators=[DataRequired()])
 
 # 라우트 및 뷰 함수 정의
 @app.route('/')
@@ -96,7 +36,7 @@ def index():
 
 @app.route('/home')
 def back_home():
-    return render_template('index.html')
+    return render_template('initial.html')
 
 @app.route('/overview')
 def overview():
@@ -120,25 +60,30 @@ def reader_service():
 
 @app.route('/inquiry', methods=['GET', 'POST'])
 def inquiry():
-    form = TaskForm()  # GET 요청에서 폼 객체 생성
-    
+    form = TaskForm()
+
+    # 현재 날짜를 먼저 정의하고 시작합니다.
+    now = datetime.now()
+
     if request.method == 'POST':
         if form.validate_on_submit():
             title = form.title.data
             contents = form.contents.data
-            due_date = form.due_date.data
 
-            new_task = Task(title=title, contents=contents, due_date=due_date)
+            # 작성일을 현재 날짜로 설정합니다.
+            new_task = Task(title=title, contents=contents, input_date=now, due_date=now)
             db.session.add(new_task)
             db.session.commit()
 
-            return jsonify({'success': True}), 200
+            tasks = Task.query.all()  # 새로운 task가 추가된 후에 전체 tasks를 가져옵니다.
+            return render_template('inquiry.html', form=form, tasks=tasks, now=now)
         else:
             errors = {field: form.errors[field][0] for field in form.errors}
             return jsonify({'success': False, 'errors': errors}), 400
 
+    # GET 요청 처리
     tasks = Task.query.all()
-    return render_template('inquiry.html', form=form, tasks=tasks)
+    return render_template('inquiry.html', form=form, tasks=tasks, now=now)
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
@@ -153,7 +98,23 @@ def get_tasks():
             'due_date': task.due_date.strftime('%Y-%m-%d')
         })
     return jsonify(task_list)
+#----------------------------------------------------------------
 
+@app.route('/recommend', methods=['POST'])
+def recommend():
+    user_gender = request.form['gender']
+    user_age = int(request.form['age'])
+    result = get_book_recommendations(user_gender, user_age)
+    if result:
+        recommendations = result.split('\n')
+        return jsonify({'recommendations': recommendations})
+    else:
+        return jsonify({'recommendations': ["추천 도서를 찾을 수 없습니다."]})
+
+
+
+#----------------------------------------------------------------------------------------
+ 
 @app.route('/edit/<int:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id):
     task = Task.query.get_or_404(task_id)
@@ -173,16 +134,5 @@ def delete_task(task_id):
     db.session.commit()
     return redirect(url_for('inquiry'))
 
-@app.route('/admin')
-def admin():
-    if "user_id" not in session or not session['is_admin']:
-        return redirect(url_for('login'))
-    users = User.query.all()
-    return render_template('admin.html', users=users)
-
-
 if __name__ == '__main__':
-    # @app.before_request에서 db를 만들어주면서 필요 없어짐.
-    # with app.app_context():
-    #     db.create_all()
     app.run(debug=True)

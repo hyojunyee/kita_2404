@@ -1,86 +1,75 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>책사이트 이름</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
-</head>
-<body>
-    <header>
-        <nav>
-            <ul class="menu">
-                <li class="menu-item">
-                    <a href="{{ url_for('index') }}" class="menu-link">
-                        <img src="{{ url_for('static', filename='logo.png') }}" alt="로고 이미지" style="width: 50px; height: auto;">
-                        HOME
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">소개</a>
-                    <ul class="submenu">
-                        <li><a href="/overview">프로젝트 개요</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">출판사.서점 서비스</a>
-                    <ul class="submenu">
-                        <li><a href="{{ url_for('target_customer') }}">Target Customer</a></li>
-                        <li><a href="{{ url_for('publisher_service') }}">Who's my Customer?</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">독자 서비스</a>
-                    <ul class="submenu">
-                        <li><a href="{{ url_for('reader_service') }}">책 추천</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url_for('inquiry') }}" class="menu-link">문의 사항</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
+{% block title %}
+책사이트 이름 - 홈
+{% endblock %}
+
+{% block content %}
     <main class="main-content">
-        <div class="menu-box-container">
-            <div class="menu-box" id="ageBox">
+        <details>
+            <summary class="menu-box" data-target="ageOptions">
                 <img src="{{ url_for('static', filename='age.png') }}" alt="연령대 아이콘">
                 연령대
+            </summary>
+            <div class="options-container" id="ageOptions">
+                <select id="age-select">
+                    <option value="">선택</option>
+                    <option value="10">10대</option>
+                    <option value="20">20대</option>
+                    <option value="30">30대</option>
+                    <option value="40">40대</option>
+                    <option value="50">50대</option>
+                    <option value="60">60대</option>
+                </select>
             </div>
-            <div class="menu-box" id="catBox">
-                <img src="{{ url_for('static', filename='books.png') }}" alt="카테고리 아이콘">
+        </details>
+        
+        <details>
+            <summary class="menu-box" data-target="catOptions">
+                <img src="{{ url_for('static', filename='images/books.png') }}" alt="카테고리 아이콘">
                 카테고리
+            </summary>
+            <div class="options-container" id="catOptions">
+                <select id="cat-select">
+                    <option value="">선택</option>
+                    <option value="가정과 살림">가정과 살림</option>
+                    <option value="자연과학">자연과학</option>
+                    <option value="만화/라이트노벨">만화/라이트노벨</option>
+                    <option value="역사">역사</option>
+                    <option value="건강 취미">건강 취미</option>
+                    <option value="인문">인문</option>
+                    <option value="경제 경영">경제 경영</option>
+                    <option value="자기계발">자기계발</option>
+                    <option value="유아">유아</option>
+                    <option value="소설/시/희곡">소설/시/희곡</option>
+                </select>
             </div>
-            <div class="menu-box" id="sexBox">
+        </details>
+        
+        <details>
+            <summary class="menu-box" data-target="sexOptions">
                 <img src="{{ url_for('static', filename='gender.png') }}" alt="성별 아이콘">
                 성별
+            </summary>
+            <div class="options-container" id="sexOptions">
+                <select id="sex-select">
+                    <option value="">선택</option>
+                    <option value="남성">남성</option>
+                    <option value="여성">여성</option>
+                </select>
             </div>
+        </details>
+    
+        <div id="resultContainer" style="display: none;">
+            <div id="result"></div>
+            <button id="submitBtn" class="btn">확인</button>
+            <button id="backButton" class="btn">취소</button>
         </div>
-        <div id="ageOptions" class="options-container" style="display:none;">
-            <label for="age-select">연령대 선택:</label>
-            <select id="age-select">
-                <option value="10">10대</option>
-                <option value="20">20대</option>
-                <option value="30">30대</option>
-                <option value="40">40대</option>
-                <option value="50">50대</option>
-                <option value="60">60대</option>
-            </select>
-        </div>
-        <div id="catOptions" class="options-container" style="display:none;">
-            <!-- 카테고리 옵션 추가 -->
-        </div>
-        <div id="sexOptions" class="options-container" style="display:none;">
-            <!-- 성별 옵션 추가 -->
-        </div>
+        
+        <section class="content">
+            <div class="alert alert-primary" role="alert" style="display: none;">
+                This is a primary alert—check it out!
+            </div>
+        </section>
     </main>
-
-    <footer>
-        <p>과정명 : 코리아IT아카데미 AI기반 챗봇 및 OCR 개발 전문가 과정 수강생</p>
-        <p>제작자 : Team Project 5T : 김홍준, 이도헌, 윤효준</p>
-        <p>출처 : 해당 사이트는 교육용이며 YES24, 인터파크도서, KOSIS 자료를 사용하여 제작되었습니다.</p>
-    </footer>
-</body>
-</html>
+{% endblock %}

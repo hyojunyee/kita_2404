@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Handle menu box click events
     const menuBoxes = document.querySelectorAll(".menu-box");
-    const optionsContainers = document.querySelectorAll(".options-container");
-
     menuBoxes.forEach(function (menuBox) {
         menuBox.addEventListener("click", function () {
             const targetId = menuBox.getAttribute("data-target");
@@ -10,13 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const optionsContainer = document.getElementById(targetId);
             if (optionsContainer) {
-              optionsContainers.forEach(function (container) {
-                if (container.id !== targetId) {
-                    container.style.display = "none";
-                }
-              });
-              const isVisible = optionsContainer.style.display === "block";
-              optionsContainer.style.display = isVisible ? "none" : "block";
+                toggleOptions(optionsContainer);
+                showResultContainer(menuBox.nextElementSibling); ;
             }
         });
     });
@@ -28,12 +21,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const resultContainer = document.getElementById("resultContainer");
     const backButton = document.getElementById("backButton");
     const submitBtn = document.getElementById("submitBtn");
-    const alertBox = document.querySelector(".alert");
 
-    ageSelect.addEventListener("change", function () {
-        const selectedAge = ageSelect.value;
-        showResult(`연령대 선택: ${selectedAge}`);
-    });
+    // ageSelect.addEventListener("change", function () {
+    //     const selectedAge = ageSelect.value;
+    //     showResult(`연령대 선택: ${selectedAge}`);
+    // });
 
     catSelect.addEventListener("change", function () {
         const selectedCategory = catSelect.value;
@@ -52,8 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // submit button - publisher_servidce
-    submitBtn.addEventListener("click", function () {
-        alertBox.style.display = "block";
+    backButton.addEventListener("click", function () {
         resultContainer.style.display = "none";
     })
 
@@ -61,45 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     backButton.addEventListener("click", function () {
         resultContainer.style.display = "none";
     });
-
-
-    // Function to toggle options container
-    function toggleOptions(container) {
-      const isVisible = container.style.display === "block";
-      container.style.display = isVisible ? "none" : "block";
-  }
 });
-
-// static/js/scripts.js
-document.addEventListener("DOMContentLoaded", function () {
-  const elements = document.querySelectorAll('.fade-in');
-  const options = {
-      threshold: 0.1
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-          if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              observer.unobserve(entry.target);
-          }
-      });
-  }, options);
-
-  elements.forEach(element => {
-      observer.observe(element);
-  });
-});
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 
 // inquiry.html 부분
@@ -167,68 +120,4 @@ document.getElementById('postForm').addEventListener('submit', function(event) {
     });
   });
 
-  // target_customer_type2 - sidebar
-// 모든 collapse 영역을 처음에는 닫힌 상태로 설정
-$(document).ready(function() {
-  $('.collapse').collapse('hide');
-});
-$(document).ready(function() {
-  // 연령대 필터 클릭 이벤트
-  $('.age-filter').on('click', function(e) {
-      e.preventDefault();
-      var filterText = $(this).data('filter');
-      $('#filtered-content').html('<p>선택한 연령대: ' + filterText + '</p>');
-  });
-
-  // 카테고리 필터 클릭 이벤트
-  $('.category-filter').on('click', function(e) {
-      e.preventDefault();
-      var filterText = $(this).data('filter');
-      $('#filtered-content').html('<p>선택한 카테고리: ' + filterText + '</p>');
-  });
-
-  // 성별 필터 클릭 이벤트
-  $('.gender-filter').on('click', function(e) {
-      e.preventDefault();
-      var filterText = $(this).data('filter');
-      $('#filtered-content').html('<p>선택한 성별: ' + filterText + '</p>');
-  });
-});
-
-const express = require('express');
-const fs = require('fs');
-const xlsx = require('xlsx');
-
-const app = express();
-
-// 정적 파일 제공 (예: 클라이언트에서 사용할 HTML, CSS, JavaScript 파일)
-app.use(express.static('public'));
-
-// 엑셀 파일에서 데이터 읽어오기
-app.get('/storedata', (req, res) => {
-    const fileName = 'Store_20240715.xls';
-    const filePath = __dirname + '/' + fileName;
-
-    // 파일이 존재하는지 확인
-    if (!fs.existsSync(filePath)) {
-        res.status(404).send('File not found');
-        return;
-    }
-
-    // 엑셀 파일 읽기
-    const workbook = xlsx.readFile(filePath);
-    const sheetName = workbook.SheetNames[0]; // 첫 번째 시트를 사용
-    const sheet = workbook.Sheets[sheetName];
-    const data = xlsx.utils.sheet_to_json(sheet, { header: 1 });
-
-    // 데이터 전송
-    res.json(data);
-});
-
-// 서버 시작
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-
-
+//customer_info.html 부문

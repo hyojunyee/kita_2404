@@ -1,53 +1,86 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>책사이트 이름</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul class="menu">
-                <li class="menu-item">
-                    <a href="{{ url_for('index') }}" class="menu-link">
-                        <img src="{{ url_for('static', filename='logo.png') }}" alt="로고 이미지" style="width: 50px; height: auto;">
-                        HOME
-                    </a>
+{% extends "base.html" %}
+
+{% block title %}
+책사이트 이름 - 홈
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="sidebar">
+        <div class="flex-shrink-0 p-3">
+            <a href="/" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+                <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+                <span class="fs-5 fw-semibold">HOME</span>
+            </a>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <button class="nav-link btn-toggle" data-bs-toggle="collapse" data-bs-target="#ageCollapse" aria-expanded="false" aria-controls="ageCollapse">
+                        연령대
+                    </button>
+                    <div class="collapse" id="ageCollapse">
+                        <div class="collapse-item">
+                            <ul class="list-unstyled fw-normal pb-1 small">
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">10대</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">20대</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">30대</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">40대</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">50대</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">60대 이상</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">소개</a>
-                    <ul class="submenu">
-                        <li><a href="/overview">프로젝트 개요</a></li>
-                    </ul>
+                <li class="nav-item">
+                    <button class="nav-link btn-toggle" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="false" aria-controls="categoryCollapse">
+                        카테고리
+                    </button>
+                    <div class="collapse" id="categoryCollapse">
+                        <div class="collapse-item">
+                            <ul class="list-unstyled fw-normal pb-1 small">
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">가정과 살림</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">자연과학</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">만화/라이트노벨</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">역사</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">건강 취미</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">인문</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">경제 경영</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">자기계발</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">유아</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">소설/시/희곡</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">출판사.서점 서비스</a>
-                    <ul class="submenu">
-                        <li><a href="{{ url_for('target_customer') }}">Target Customer</a></li>
-                        <li><a href="{{ url_for('publisher_service') }}">Who's my Customer?</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">독자 서비스</a>
-                    <ul class="submenu">
-                        <li><a href="{{ url_for('reader_service') }}">책 추천</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="/reader_service" class="menu-link">문의 사항</a>
+                <li class="nav-item">
+                    <button class="nav-link btn-toggle" data-bs-toggle="collapse" data-bs-target="#genderCollapse" aria-expanded="false" aria-controls="genderCollapse">
+                        성별
+                    </button>
+                    <div class="collapse" id="genderCollapse">
+                        <div class="collapse-item">
+                            <ul class="list-unstyled fw-normal pb-1 small">
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">남성</a></li>
+                                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">여성</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
             </ul>
-        </nav>
-    </header>
+        </div>
+    </div>
 
-    <footer>
-        <p>과정명 : 코리아IT아카데미 AI기반 챗봇 및 OCR 개발 전문가 과정 수강생</p>
-        <p>제작자 : Team Project 5T : 김홍준, 이도헌, 윤효준</p>
-        <p>출처 : 해당 사이트는 교육용이며 YES24, 인터파크도서, KOSIS 자료를 사용하여 제작되었습니다.</p>
-    </footer>
-
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
-</body>
+    <div class="content_book">
+        <h2 class="mt-4">내용 영역</h2>
+        <p>이곳에는 선택한 필터에 따른 내용이 나타납니다.</p>
+        <!-- 이미지 리스트 예시 -->
+        <img src="static/image1.png" alt="이미지 1">
+        <img src="static/image2.png" alt="이미지 2">
+        <img src="static/image3.png" alt="이미지 3">
+        <img src="static/image4.png" alt="이미지 4">
+        <!-- 필요한 만큼 이미지 추가 --> 
+    </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    {% endblock %}
+    </body>
 </html>

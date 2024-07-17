@@ -1,6 +1,4 @@
-/* style.css */
-
-/* General styles */
+/* Base General styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -20,6 +18,7 @@ header nav {
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    justify-content: center;
 }
 
 .menu {
@@ -27,11 +26,12 @@ header nav {
     margin: 0;
     padding: 0;
     display: flex; /* 네비게이션 메뉴를 가로로 배치 */
+    justify-content: center;
 }
 
 .menu-item {
     position: relative;
-    margin-right: 20px;
+    margin-right: 40px;
 }
 
 .menu-link {
@@ -39,6 +39,7 @@ header nav {
     color: #fff;
     padding: 10px 15px;
     display: block;
+    font-size: 24px;
 }
 
 .menu-link:hover {
@@ -53,7 +54,8 @@ header nav {
     background-color: #333;
     list-style-type: none;
     padding: 0;
-    width: 200px; /* 서브메뉴 너비 조정 */
+    width: auto; /* 서브메뉴 너비 자동 조절 */
+    min-width: 300px; /* 최소 너비 설정 (옵션) */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
 }
 
@@ -63,9 +65,11 @@ header nav {
 
 .submenu li a {
     display: block;
-    padding: 10px;
+    padding: 5px;
     color: white;
     text-decoration: none;
+    font-size: 20px;
+    font-weight: 100; /* 폰트 얇게 설정 */
 }
 
 .submenu li a:hover {
@@ -76,6 +80,7 @@ header nav {
     display: block;
 }
 
+/* Publisher_service MenuBox styles */
 .main-content {
     display: flex;
     justify-content: center;
@@ -83,73 +88,138 @@ header nav {
     height: 100vh;
 }
 
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
 .menu-box-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
 }
 
 .menu-box {
-    width: 300px;
+    width: 500px;
     height: 500px;
     padding: 20px;
     background-color: #f0f0f0;
     text-align: center;
     border: 1px solid #ccc;
     cursor: pointer;
-    margin: -200px 10px 0; /* 각 menu-box 사이의 간격을 조정 */
+    margin: -350px 10px 0; /* 각 menu-box 사이의 간격을 조정 */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
+    font-size:32px;
+    font-weight: bold;
+    position: relative;
 }
 
 .menu-box img {
-    max-width: 300px;
-    max-height: 500px;
+    max-width: 80%;
+    max-height: 80%;
     margin-bottom: 10px;
 }
 
 .menu-box:hover {
     background-color: #e0e0e0;
 }
+.options-container {
+    display: none;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #fafafa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+.options-container select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+/* publihser_service - select_box */
+#resultContainer {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    display: none;
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20%;
+    text-align: center; 
+    z-index: 1000;
+}
+
+#resultContainer p {
+    margin-bottom: 10px; /* 텍스트와 버튼 사이의 간격 조정 */
+}
+
+#resultContainer button {
+    margin-top: 10px; /* 버튼 위쪽 여백 조정 */
+}
+
+
+#submitButton {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#sumitButton:hover {
+    background-color: #0056b3;
+}
+
+
+#backButton, #submitBtn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#backButton:hover, #submitBtn:hover {
+    background-color: #0056b3;
+}
+
+/* Base General style - footer */
 footer {
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 10px 0;
-    /* position: fixed; */
+    position: fixed;
     bottom: 0;
     width: 100%;
-}
-
-/* publisher_service 서브메뉴 */
-.submenu-container {
-    display: none;
-    margin-top: 10px;
-}
-
-.submenu-item {
-    margin-left: 20px;
-    cursor: pointer;
-}
-
-.submenu-item:hover {
-    text-decoration: underline;
 }
 
 /* 문의 사항 섹션 */
 .section-container {
     width: 80%;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 100px;
     border: 1px solid #ccc;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 400px; /* 원하는 세로 길이(px)를 설정합니다 */
 }
 
 .section-header {
@@ -200,7 +270,12 @@ footer {
     text-decoration: underline;
 }
 
-/* --------------------------------------------------- */
+#resultContainer {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
 
 .project-section {
     padding: 20px;
@@ -229,6 +304,7 @@ footer {
     height: auto;
 }
 
+/* reader_service - style */
 .reader-service-content {
     max-width: 800px;
     margin: 0 auto;
@@ -321,113 +397,116 @@ footer {
     border-radius: 4px;
 }
 
-/* ------------------------------------------ */
-
-/* 로그인 상태 스타일 */
-#login-status {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
-/* 모달 스타일 */
-.modal {
-    display: none;
+/* target_customer - sidebar style */
+.sidebar {
+    width: 280px;
+    height: 100vh;
     position: fixed;
-    z-index: 1;
-    left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
+    left: 0;
+    background-color: #f8f9fa;
     padding: 20px;
-    border: 1px solid #888;
-    width: 300px;
-    border-radius: 5px;
+    overflow-y: auto; /* 사이드바 길어질 때 스크롤바 표시 */
+    border-right: 1px solid #dee2e6; /* 사이드바 우측에 경계선 추가 */
 }
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+.content {
+    margin-left: 280px;
+    padding: 20px;
+    width: calc(100% - 280px);
+}
+.sidebar .nav-link {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #212529; /* 링크 색상 */
+    cursor: pointer; /* 포인터 커서 */
+}
+.sidebar .nav-link:hover {
+    background-color: #e9ecef; /* 링크 호버 배경색 */
+}
+.sidebar .nav-item {
+    margin-bottom: 15px;
+}
+.sidebar .nav-item:last-child {
+    margin-bottom: 0;
+}
+.collapse-item {
+    padding-left: 20px;
+}
+.filter-label {
     font-weight: bold;
-    cursor: pointer;
+    color: #6c757d; /* 필터 레이블 색상 */
+}
+.link-body-emphasis {
+    color: #0d6efd; /* 링크 강조 색상 */
+}
+.link-body-emphasis:hover {
+    text-decoration: none; /* 링크 호버 시 밑줄 제거 */
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.content_book {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 반응형 그리드 설정 */
+    grid-gap: 10px; /* 그리드 아이템 사이 간격 */
 }
 
-#login-form input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.content_book img {
+    width: 100%; /* 이미지 너비 100%로 설정 */
+    height: auto; /* 비율에 맞게 높이 자동 조정 */
+    display: block; /* 인라인 요소를 블록 요소로 변환 */
 }
 
-#login-form button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
 
-#login-form button:hover {
-    background-color: #0056b3;
+/* customer_info - map style */
+#map {
+    height: 800px;
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
-
-/* 로그인 모달과 동일한 스타일 적용 */
-#register-modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
-
-#register-modal .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
+.legend {
+    position: absolute;
+    top: 20%;
+    right: 25%;
+    background-color: white;
     padding: 20px;
-    border: 1px solid #888;
-    width: 300px;
+    font-size: 20px;
+    line-height: 1.5;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* 로그인 폼과 동일한 스타일 적용 */
-#register-form input,
-#register-form button {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.legend-title {
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-#register-form button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
+.legend-item {
+    margin-bottom: 5px;
 }
 
-#register-form button:hover {
-    background-color: #0056b3;
+.legend-color {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+#modalMap {
+    height: 400px;
+}
+
+/* style.css */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
 }

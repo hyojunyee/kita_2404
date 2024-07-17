@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block title %}Leaflet 한국 지도 예제{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국 지도 - 인구 수</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="legend">
+        <div class="legend-title">인구 수 범례</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #b10026;"></span> 5,000,000 이상</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #e31a1c;"></span> 3,000,000 - 5,000,000</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #fc4e2a;"></span> 2,000,000 - 3,000,000</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #fd8d3c;"></span> 1,800,000 - 2,000,000</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #feb24c;"></span> 1,600,000 - 1,800,000</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #fed976;"></span> 1,400,000 - 1,600,000</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #ffeda0;"></span> 1,200,000 - 1,400,000</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #ffffcc;"></span> 1,000,000 - 1,200,000</div>
+    </div>
+    
+    <script>
+        var map = L.map('map').setView([36.5, 127.5], 7);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var markers = []; // 마커를 담을 배열
+
+        // 서버에서 주소 정보를 가져와서 마커 추가
+        $.ajax({
+            url: '/storedata', // 서버에서 엑셀 파일 데이터를 처리하는 엔드포인트
+            dataType: 'json',
+            success: function(data) {
+                data.forEach(function(item) {
+                    var address = item[5]; // 주소가 엑셀 파일의 6번째 열(0부터 시작)에 있다고 가정
+                    var storeName = item[3]; // 서점명이 엑셀 파일의 4번째 열에 있다고 가정
+                    var storeMarker = L.marker([0, 0]).bindPopup('<b>' + storeName + '</b><br>' + address);
+
+                    // 주소를 위경도로 변환하여 마커 위치 설정
+                    $.getJSON('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + address, function(data) {
+                        if (data.length > 0) {
+                            var latlng = [data[0].lat, data[0].lon];
+                            storeMarker.setLatLng(latlng);
+                            markers.push(storeMarker); // 마커 배열에 추가
+                            map.addLayer(storeMarker); // 지도에 마커 추가
+                        }
+                    });
+                });
+            }
+        });
+
+        // 지도의 확대/축소 이벤트 감지하여 마커 제어
+        map.on('zoomend', function() {
+            var currentZoom = map.getZoom();
+            if (currentZoom >= 10) { // 지정한 확대 수준 이상일 때 마커 추가
+                markers.forEach(function(marker) {
+                    map.addLayer(marker);
+                });
+            } else { // 확대 수준이 지정 수준 미만이면 마커 숨김
+                markers.forEach(function(marker) {
+                    map.removeLayer(marker);
+                });
+            }
+        });
+
+        // GeoJSON 데이터 가져오기
+        $.ajax({
+            dataType: "json",
+            url: "/geojson",
+            success: function(data) {
+                L.geoJSON(data, {
+                    style: function(feature) {
+                        var population = getPopulation(feature.properties.CTP_KOR_NM); // 특정 지역의 인구수 가져오기
+                        var fillColor = getColor(population); // 색상 설정을 인구 수에 따라 변경
+                        return {
+                            fillColor: fillColor,
+                            color: 'black',
+                            weight: 1,
+                            fillOpacity: 0.7
+                        };
+                    },
+                    onEachFeature: function(feature, layer) {
+                        layer.on({
+                            mouseover: function(e) {
+                                this.setStyle({
+                                    'fillOpacity': 0.9
+                                });
+                            },
+                            mouseout: function(e) {
+                                this.setStyle({
+                                    'fillOpacity': 0.7
+                                });
+                            },
+                            click: function(e) {
+                                var regionName = feature.properties.CTP_KOR_NM;
+                                var popupContent = getPopulationInfo(regionName);
+                                layer.bindPopup(popupContent).openPopup();
+                            }
+                        });
+                    }
+                }).addTo(map);
+            }
+        });
+
+        // 특정 지역의 인구수 가져오기
+        function getPopulation(regionName) {
+            var population = 0;
+            $.ajax({
+                dataType: "json",
+                url: "/population",
+                async: false,
+                success: function(data) {
+                    var record = data.find(item => item.행정구역 === regionName);
+                    if (record) {
+                        population = record.인구수;
+                    }
+                }
+            });
+            return population;
+        }
+
+        // 인구수에 따라 색상 결정하기
+        function getColor(population) {
+            return population > 5000000 ? '#b10026' :
+                population > 3000000 ? '#e31a1c' :
+                population > 2000000 ? '#fc4e2a' :
+                population > 1800000 ? '#fd8d3c' :
+                population > 1600000 ? '#feb24c' :
+                population > 1400000 ? '#fed976' :
+                population > 1200000 ? '#ffeda0' :
+                population > 1000000 ? '#ffffcc' :
+                                        '#ffffff'; // 최소 인구수에 대한 색상
+        }
+
+        // 팝업에 표시될 인구 정보 가져오기
+        function getPopulationInfo(regionName) {
+            var population = '';
+            $.ajax({
+                dataType: "json",
+                url: "/population",
+                async: false,
+                success: function(data) {
+                    var record = data.find(item => item.행정구역 === regionName);
+                    if (record) {
+                        var totalPopulation = record.인구수;
+                        var malePopulation = data.find(item => item.행정구역 === regionName && item.성별 === '남');
+                        var femalePopulation = data.find(item => item.행정구역 === regionName && item.성별 === '여');
+                        var monthPopulation = data.find(item => item.행정구역 === regionName && item.월 === 6);
+                        var ageGroups = {};
+                        
+                        data.forEach(item => {
+                            if (item.행정구역 === regionName && item.성별 === '전체') {
+                                ageGroups[item.연령대] = item.인구수;
+                            }
+                        });
+
+                        population = `
+                            <b>■ ${regionName}</b><br>
+                            ■ 성별 인구수:<br>
+                            남성인구: ${malePopulation ? malePopulation.인구수 : '데이터 없음'}<br>
+                            여성인구: ${femalePopulation ? femalePopulation.인구수 : '데이터 없음'}<br>
+                            ■ 연령대별 인구수:<br>
+                        `;
+                        
+                        // 연령대별 인구수 추가
+                        Object.keys(ageGroups).forEach(ageGroup => {
+                            population += `${ageGroup}: ${ageGroups[ageGroup]}<br>`;
+                        });
+                        
+                        population += `■ 총인구수: ${totalPopulation}`;
+                    } else {
+                        population = `<b>${regionName}</b><br>인구 데이터 없음`;
+                    }
+                }
+            });
+            return population;
+        }
+    </script>
+</body>
+</html>
+
+{% endblock %}

@@ -1,104 +1,204 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>책사이트 이름</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/scripts.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
-</head>
-<body>
-    <header>
-        <nav>
-            <ul class="menu">
-                <li class="menu-item">
-                    <a href="{{ url_for('index') }}" class="menu-link">
-                        <img src="{{ url_for('static', filename='logo.png') }}" alt="로고 이미지" style="width: 50px; height: auto;">
-                        HOME
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">소개</a>
-                    <ul class="submenu">
-                        <li><a href="/overview">프로젝트 개요</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">출판사.서점 서비스</a>
-                    <ul class="submenu">
-                        <li><a href="{{ url_for('target_customer') }}">Target Customer</a></li>
-                        <li><a href="{{ url_for('publisher_service') }}">Who's my Customer?</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">독자 서비스</a>
-                    <ul class="submenu">
-                        <li><a href="{{ url_for('reader_service') }}">책 추천</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url_for('inquiry') }}" class="menu-link">문의 사항</a>
-                </li>
-            </ul>
-        </nav>
-        <div id="login-status">
-            <span id="user-greeting"></span>
-            <button id="login-button">로그인</button>
-            <button id="logout-button" style="display: none;">로그아웃</button>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <main>
-        <h1>Welcome to Book Cafe website!</h1>
-        <p>Here you can find information about Book Information and recommend services.</p>
-        
-        <!-- 로그인 모달 -->
-        <div id="login-modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h1>로그인</h1>
-                <form id="login-form">
-                    <input type="text" id="username" name="username" placeholder="ID" required>
-                    <input type="password" id="password" name="password" placeholder="PW" required>
-                    <button type="submit">로그인</button>
-                </form>
+{% block title %}
+책사이트 이름 - 홈
+{% endblock %}
+
+{% block content %}
+  <main>
+    <h2>부스스트랩 기능/스타일 테스트</h2>
+    <h3>쓸만한거 활용</h3>
+            <!-- 버튼 -->
+             <p>1.버튼</p>
+            <button type="button" class="btn btn-primary">Primary Button</button>
+            <button type="button" class="btn btn-secondary">Secondary Button</button>
+            <button type="button" class="btn btn-success">Success Button</button>
+            <button type="button" class="btn btn-danger">Danger Button</button>
+            <button type="button" class="btn btn-warning">Warning Button</button>
+            <button type="button" class="btn btn-info">Info Button</button>
+            <button type="button" class="btn btn-light">Light Button</button>
+            <button type="button" class="btn btn-dark">Dark Button</button>
+            
+            <!-- 그리드 시스템 -->
+             <p>2.그리드 시스템</p>
+            <div class="container">
+                <div class="row">
+                  <div class="col-md-4">Column 1</div>
+                  <div class="col-md-4">Column 2</div>
+                  <div class="col-md-4">Column 3</div>
+                </div>
+              </div>
+              
+            <!-- 카드 생성 -->
+             <p>3.카드 생성</p>
+        <div class="card" style="width: 18rem;">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
-        </div>
-
-        <!-- 회원가입 모달 -->
-        <div id="register-modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h1>회원가입</h1>
-                <form id="register-form">
-                    <input type="text" id="reg-username" name="username" placeholder="ID" required>
-                    <input type="password" id="reg-password" name="password" placeholder="PW" required>
-                    <button type="submit">가입하기</button>
-                </form>
+          </div>
+          <form>
+            <!-- 폼 생성 -->
+             <p>4.폼 생성</p>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>
-        </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" class="form-control" id="exampleInputPassword1">
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
 
-        <!-- 태스크 추가 폼 -->
-        <div id="addTaskForm" style="display:none;">
-            <form id="addTaskForm">
-                <input type="text" id="task-title" name="title" placeholder="태스크 제목" required>
-                <textarea id="task-contents" name="contents" placeholder="태스크 내용" required></textarea>
-                <input type="date" id="task-due-date" name="due_date" required>
-                <button type="submit">태스크 추가</button>
-                <button type="button" id="cancelButton">취소</button>
-            </form>
+          <!-- 마진 패딩 -->
+           
+          <div class="mt-5 p-3 bg-primary text-white">5.마진과 패딩이 적용된 박스</div>
+          <!-- 텍스트 박스 -->
+           <p>6.텍스트 박스</p>
+          <p class="text-center">Centered text</p>
+          <p class="text-right">Right aligned text</p>
+          <p class="text-left">Left aligned text</p>
+          <!-- 색상유틸리티 -->
+           <p>7.색상유틸리티</p>
+          <p class="text-primary">Primary text</p>
+          <p class="text-secondary">Secondary text</p>
+          <p class="text-success">Success text</p>
+          <p class="text-danger">Danger text</p>
+          <p class="text-warning">Warning text</p>
+          <p class="text-info">Info text</p>
+          <p class="text-light bg-dark">Light text</p>
+          <p class="text-dark">Dark text</p>
+          <!-- 탭 -->
+           <p>8.탭 기능</p>
+           <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">Home content...</div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Profile content...</div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">Contact content...</div>
+          </div>
+          <!-- 아코디언 기능 -->
+           <p>9. 아코디언 기능</p>
+           <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Accordion Item #1
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  This is the first item's accordion body.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Accordion Item #2
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  This is the second item's accordion body.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Accordion Item #3
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  This is the third item's accordion body.
+                </div>
+              </div>
+            </div>
+          </div>
+            <!-- 툴팁 기능 -->
+             <p>10.툴팁 기능</p>
+             <!-- Button to trigger tooltip -->
+<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+    Tooltip on top
+  </button>
+  
+  <!-- Initialize tooltip with JavaScript -->
+  <script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  </script>
+  
+  <!-- 모달기능 -->
+   <p>11.모달 기능</p>
+   <!-- Button to trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button>
+  
+  <!-- Modal structure -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <button id="addTaskButton">태스크 추가</button>
-
-        <!-- 태스크 리스트 -->
-        <ul id="task-list"></ul>
+        <div class="modal-body">
+          This is a Bootstrap modal example.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- 알람 기능 -->
+     <p>12.알람 기능</p>
+     <div class="alert alert-primary" role="alert">
+        This is a primary alert—check it out!
+      </div>
+      <div class="alert alert-secondary" role="alert">
+        This is a secondary alert—check it out!
+      </div>
+      <div class="alert alert-success" role="alert">
+        This is a success alert—check it out!
+      </div>
+      <div class="alert alert-danger" role="alert">
+        This is a danger alert—check it out!
+      </div>
+      <div class="alert alert-warning" role="alert">
+        This is a warning alert—check it out!
+      </div>
+      <div class="alert alert-info" role="alert">
+        This is an info alert—check it out!
+      </div>
+      <div class="alert alert-light" role="alert">
+        This is a light alert—check it out!
+      </div>
+      <div class="alert alert-dark" role="alert">
+        This is a dark alert—check it out!
+      </div>
     </main>
-
-    <footer>
-        <p>과정명 : 코리아IT아카데미 AI기반 챗봇 및 OCR 개발 전문가 과정 수강생</p>
-        <p> 제작자 : Team Project 5T : 김홍준, 이도헌, 윤효준</p>
-        <p> 출처 : 해당 사이트는 교육용이며 YES24, 인터파크도서, KOSIS 자료를 사용하여 제작되었습니다.</p>
-    </footer>
-</body>
-</html>
+  {% endblock %}
