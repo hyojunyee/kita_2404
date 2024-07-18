@@ -1,0 +1,13 @@
+{% extends "base.html" %} 
+{% block title %}Admin Analysis{% endblock %} 
+{% block header %}Admin Analysis{% endblock %} 
+{% block content %}
+<form method="POST" action="{{ url_for('admin') }}" class="mt-4">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <div class="form-group">
+      <label for="completion_date">완수일</label>
+      <input type="date" name="completion_date" id="completion_date" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  {% endblock %}
