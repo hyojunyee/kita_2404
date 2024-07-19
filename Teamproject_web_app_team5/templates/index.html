@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}
-책사이트 이름 - 홈
+책사이트 이름 - 프로젝트 개요
 {% endblock %}
 
 {% block content %}
-<main class="d-flex align-items-center justify-content-center min-vh-100">
-    <div class="text-center">
-        <a href="{{ url_for('static', filename='ppt/your_presentation.pptx') }}" target="_blank">
-            <img src="{{ url_for('static', filename='img/ppt.png') }}" alt="중앙 이미지" class="central-image img-fluid rounded shadow-sm">
-        </a>
-    </div>
+<main>
+    <section class="project-title container p-4 shadow-sm fade-in">
+        <h1>2024년도 도서 트렌드에 대한 분석 사이트</h1>
+    </section>
 </main>
 {% endblock %}

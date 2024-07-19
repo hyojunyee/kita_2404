@@ -13,10 +13,10 @@
 <body>
     <header>
         <nav>
+            <a href="{{ url_for('index') }}" class="logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Reader Mind">
+            </a>
             <ul class="menu">
-                <li class="menu-item">
-                    <a href="{{ url_for('index') }}" class="menu-link">홈</a>
-                </li>
                 <li class="menu-item">
                     <a href="#" class="menu-link">소개</a>
                     <ul class="submenu">
@@ -26,8 +26,7 @@
                 <li class="menu-item">
                     <a href="#" class="menu-link">출판사.서점 서비스</a>
                     <ul class="submenu">
-                        <li><a href="{{ url_for('publisher_service') }}">Target Customer_Type:1</a></li>
-                        <li><a href="{{ url_for('target_customer') }}">Target Customer_Type:2</a></li>
+                        <li><a href="{{ url_for('publisher_service') }}">Target Customer</a></li>
                         <li><a href="{{ url_for('customer_info') }}">지역별 연령 분포도</a></li>
                         <li><a href="{{ url_for('books_store_info') }}">서울시 서점 분포도</a></li>
                     </ul>
@@ -41,9 +40,10 @@
                 <li class="menu-item">
                     <a href="{{ url_for('inquiry') }}" class="menu-link">문의 사항</a>
                 </li>
-                <li class="menu-item">
+<!--                <li class="menu-item">
                     <a href="{{ url_for('ttt') }}" class="menu-link">기능 테스트용 페이지</a>
                 </li>
+-->
             </ul>
         </nav>
     </header>

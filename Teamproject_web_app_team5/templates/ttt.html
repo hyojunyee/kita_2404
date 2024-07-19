@@ -1,186 +1,267 @@
-{% extends "base.html" %}
-{% block title %}Leaflet 한국 지도 예제{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Insights Visualization (Yes24 Data)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>연령대별 인사이트 시각화 (Yes24 데이터)</h1>
+    
+    <label for="ageSelect">연령대 선택:</label>
+    <select id="ageSelect">
+        <option value="10">10대</option>
+        <option value="20">20대</option>
+        <option value="30">30대</option>
+        <option value="40">40대</option>
+        <option value="50">50대</option>
+        <option value="60">60대 이상</option>
+    </select>
+    <button onclick="generateInsights()">Submit</button>
 
-{% block content %}
-<div id="mapContainer">
-    <div id="map"></div>
-</div>
-<div id="seoulMapContainer" style="display: none;">
-    <div id="seoulMap"></div>
-    <button id="backButton" class="btn btn-primary">Back to Main Map</button>
-</div>
+    <div id="chartsContainer">
+        <div class="chartContainer">
+            <h2 id="topCategoriesTitle"></h2>
+            <canvas id="topCategoriesChart" width="100" height="100"></canvas>
+        </div>
 
-<!-- 모달 창 -->
-<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">서점 정보</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="modalContent"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+        <div class="chartContainer">
+            <h2 id="ageRatioTitle"></h2>
+            <canvas id="ageRatioChart" width="100" height="100"></canvas>
+        </div>
+
+        <div class="chartContainer">
+            <h2 id="genderRatioTitle"></h2>
+            <canvas id="genderRatioChart" width="100" height="100"></canvas>
+        </div>
+
+        <div class="chartContainer">
+            <h2 id="pageLengthTitle"></h2>
+            <canvas id="pageLengthChart" width="100" height="100"></canvas>
+        </div>
+
+        <div class="chartContainer">
+            <h2 id="priceRangeTitle"></h2>
+            <canvas id="priceRangeChart" width="100" height="100"></canvas>
         </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var bookData = [];  // 데이터를 저장할 전역 변수
 
-<script>
-jQuery.noConflict(); // jQuery 충돌 방지
-
-jQuery(document).ready(function($) {
-    var mainMap = L.map('map').setView([36.5, 127.5], 7);
-    var seoulMap = null; // 서울특별시 지도 객체 저장 변수
-    var 서울서점데이터 = null; // 서울특별시 서점 데이터
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '지도 데이터 &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 기여자들'
-    }).addTo(mainMap);
-
-    // 서점 데이터를 불러와서 지도에 마커 추가
-    $.getJSON('static/book_store_all.json', function(data) {
-        서울서점데이터 = data;
-
-        // TL_SCCO_CTPRVN.json 파일을 불러와서 지역명과 중심 좌표를 매핑
-        $.getJSON('static/TL_SCCO_CTPRVN.json', function(data) {
-            L.geoJSON(data, {
-                style: function(feature) {
-                    var 지역명 = feature.properties.CTP_KOR_NM;
-                    var 서점개수 = getCountByRegion(지역명);
-
-                    // 색상을 서점 개수에 따라 지정
-                    var fillColor = getColor(서점개수);
-
-                    return {
-                        weight: 1,
-                        opacity: 1,
-                        color: 'black',
-                        fillOpacity: 0.7,
-                        fillColor: fillColor
-                    };
+        $(document).ready(function() {
+            $.ajax({
+                url: 'static/yes24.csv',  // 적절한 경로로 수정
+                dataType: 'text',
+                success: function(data) {
+                    console.log("CSV data loaded successfully");
+                    bookData = parseData(data);
+                    console.log("Parsed book data:", bookData);
+                    generateInsights();  // 데이터 로드 후 시각화 함수 호출
                 },
-                onEachFeature: function(feature, layer) {
-                    var 지역명 = feature.properties.CTP_KOR_NM;
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Error loading CSV:", textStatus, errorThrown);
+                    alert("데이터 로딩 중 오류가 발생했습니다.");
+                }
+            });
+        });
 
-                    if (지역명 === '서울특별시') {
-                        // 서울특별시인 경우 클릭 이벤트 설정
-                        layer.on('click', function(e) {
-                            $('#mapContainer').hide();
-                            $('#seoulMapContainer').show();
+        function parseData(data) {
+            var lines = data.trim().split('\n');
+            var headers = lines[0].split(',');
+            var parsedData = [];
 
-                            // 이전 지도 제거
-                            if (seoulMap) {
-                                seoulMap.remove();
-                                seoulMap = null;
-                            }
+            for (var i = 1; i < lines.length; i++) {
+                var columns = lines[i].split(',');
+                if (columns.length === headers.length) {
+                    var book = {
+                        Category: columns[2],
+                        Title: columns[3].startsWith('"') && columns[1].endsWith('"') ? columns[1].slice(1, -1) : columns[3],
+                        Author: columns[4].startsWith('"') && columns[2].endsWith('"') ? columns[2].slice(1, -1) : columns[4],
+                        Publisher: columns[5],
+                        Sales_Index: parseInt(columns[8]),
+                        Gender: parseInt(columns[11]),
+                        Age: parseInt(columns[12]),
+                        Page_cat: columns[15],
+                        Price_cat: columns[16]
+                    };
+                    parsedData.push(book);
+                } else {
+                    console.log("Invalid line:", lines[i]);
+                }
+            }
+            return parsedData;
+        }
 
-                            // 서울특별시 지도 생성
-                            seoulMap = L.map('seoulMap').setView([37.5665, 126.978], 11); // 서울시의 중심 좌표로 설정
+        function generateInsights() {
+            var age = document.getElementById('ageSelect').value;
+            var filteredData = bookData.filter(function(item) {
+                return item.Age.toString() === age;
+            });
 
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                maxZoom: 18,
-                                attribution: '지도 데이터 &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 기여자들'
-                            }).addTo(seoulMap);
+            var preferences = calculateTopCategories(filteredData);
+            var ageRatio = calculateAgeRatio(bookData, age);
+            var genderRatio = calculateGenderRatio(filteredData);
+            var pageLengthPreference = calculatePageLengthPreference(filteredData);
+            var priceRangePreference = calculatePriceRangePreference(filteredData);
 
-                            // 서울특별시 구 경계 GeoJSON 추가
-                            var seoulUrl = 'static/Seoul_Gu.json';
-                            $.getJSON(seoulUrl, function(seoulBoundaryData) {
-                                L.geoJSON(seoulBoundaryData, {
-                                    style: function(feature) {
-                                        var 구명 = feature.properties.SIG_KOR_NM;
-                                        var 서점개수 = getCountByGu(구명);
+            document.getElementById('topCategoriesTitle').innerText = `${age}대가 선호하는 카테고리 TOP 5`;
+            document.getElementById('ageRatioTitle').innerText = `전체 독자 중 ${age}대 비율`;
+            document.getElementById('genderRatioTitle').innerText = `${age}대 독자 남녀 비율`;
+            document.getElementById('pageLengthTitle').innerText = `${age}대 독자들이 선호하는 책 길이`;
+            document.getElementById('priceRangeTitle').innerText = `${age}대 독자들이 선호하는 책의 가격`;
 
-                                        // 색상을 서점 개수에 따라 지정
-                                        var fillColor = getColor_seoul(서점개수);
+            destroyChart('topCategoriesChart');
+            destroyChart('ageRatioChart');
+            destroyChart('genderRatioChart');
+            destroyChart('pageLengthChart');
+            destroyChart('priceRangeChart');
 
-                                        return {
-                                            weight: 1,
-                                            opacity: 1,
-                                            color: 'black',
-                                            fillOpacity: 0.7,
-                                            fillColor: fillColor
-                                        };
-                                    },
-                                    onEachFeature: function(feature, layer) {
-                                        var 구명 = feature.properties.SIG_KOR_NM;
+            drawBarChart('topCategoriesChart', preferences);
+            drawPieChart('ageRatioChart', ageRatio, `${age}대`);
+            drawPieChart('genderRatioChart', genderRatio, `${age}대 독자 남녀 비율`);
+            drawBarChart('pageLengthChart', pageLengthPreference);
+            drawBarChart('priceRangeChart', priceRangePreference);
+        }
 
-                                        // 클릭 이벤트 추가
-                                        layer.on('click', function(e) {
-                                            showModal(구명);
-                                        });
-                                    }
-                                }).addTo(seoulMap);
-                            });
-                        });
-                    } else {
-                        // 그 외 지역은 팝업 창 설정
-                        layer.bindPopup('<p>' + 지역명 + '</p><button class="btn btn-primary" onclick="showModal(\'' + 지역명 + '\')">서점 정보 보기</button>');
+        function calculateTopCategories(data) {
+            var categorySales = {};
+            data.forEach(function(item) {
+                if (categorySales[item.Category]) {
+                    categorySales[item.Category] += item.Sales_Index;
+                } else {
+                    categorySales[item.Category] = item.Sales_Index;
+                }
+            });
+
+            var sortedCategories = Object.keys(categorySales).sort(function(a, b) {
+                return categorySales[b] - categorySales[a];
+            }).slice(0, 5);
+
+            return sortedCategories.map(function(cat) {
+                return {
+                    label: cat,
+                    value: categorySales[cat]
+                };
+            });
+        }
+
+        function calculateAgeRatio(data, age) {
+            var totalBooks = data.length;
+            var ageBooks = data.filter(function(item) {
+                return item.Age.toString() === age;
+            }).length;
+
+            var ratio = (ageBooks / totalBooks) * 100;
+            return {
+                labels: ['나이대 비율', '나머지'],
+                values: [ratio, 100 - ratio]
+            };
+        }
+
+        function calculateGenderRatio(data) {
+            var genderCounts = {0: 0, 1: 0};  // 0: 여성, 1: 남성
+            data.forEach(function(item) {
+                genderCounts[item.Gender]++;
+            });
+
+            return {
+                labels: ['여성', '남성'],
+                values: [genderCounts[0], genderCounts[1]]
+            };
+        }
+
+        function calculatePageLengthPreference(data) {
+            var pageCategories = {};
+            data.forEach(function(item) {
+                if (pageCategories[item.Page_cat]) {
+                    pageCategories[item.Page_cat]++;
+                } else {
+                    pageCategories[item.Page_cat] = 1;
+                }
+            });
+
+            var sortedCategories = Object.keys(pageCategories).sort();
+            return sortedCategories.map(function(cat) {
+                return {
+                    label: cat,
+                    value: pageCategories[cat]
+                };
+            });
+        }
+
+        function calculatePriceRangePreference(data) {
+            var priceCategories = {};
+            data.forEach(function(item) {
+                if (priceCategories[item.Price_cat]) {
+                    priceCategories[item.Price_cat]++;
+                } else {
+                    priceCategories[item.Price_cat] = 1;
+                }
+            });
+
+            var sortedCategories = Object.keys(priceCategories).sort();
+            return sortedCategories.map(function(cat) {
+                return {
+                    label: cat,
+                    value: priceCategories[cat]
+                };
+            });
+        }
+
+        function drawBarChart(canvasId, data) {
+            var ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(function(item) { return item.label; }),
+                    datasets: [{
+                        label: '판매 지수',
+                        data: data.map(function(item) { return item.value; }),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }).addTo(mainMap);
-        });
-    });
+            });
+        }
 
-    // 서점 개수에 따른 색상 반환 함수
-    function getColor(개수) {
-        return 개수 > 400 ? '#7f2704' :
-               개수 > 200 ? '#a63603' :
-               개수 > 150 ? '#e6550d' :
-               개수 > 100 ? '#fd8d3c' :
-               개수 > 50 ? '#fdbe85' :
-               개수 > 20 ? '#fee6ce' :
-                            '#fff5eb';
-    }
+        function drawPieChart(canvasId, data, title) {
+            var ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: title,
+                        data: data.values,
+                        backgroundColor: ['lightblue', 'lightpink'],
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
 
-    // 서울특별시 서점 개수에 따른 색상 반환 함수
-    function getColor_seoul(개수) {
-        return 개수 > 100 ? '#7f2704' :
-               개수 > 70 ? '#a63603' :
-               개수 > 50 ? '#e6550d' :
-               개수 > 30 ? '#fd8d3c' :
-               개수 > 20 ? '#fdbe85' :
-               개수 > 10 ? '#fee6ce' :
-                            '#fff5eb';
-    }
-
-    // 각 지역의 서점 개수 반환 함수
-    function getCountByRegion(지역명) {
-        var count = 서점데이터.filter(function(서점) {
-            return 서점['시/도'] === 지역명;
-        }).length;
-        return count;
-    }
-
-    // 각 구의 서점 개수 반환 함수
-    function getCountByGu(구명) {
-        var count = 서울서점데이터.filter(function(서점) {
-            return 서점['시/군/구'] === 구명;
-        }).length;
-        return count;
-    }
-
-    // 모달 창 보여주기
-    function showModal(구명) {
-        var 서점개수 = getCountByGu(구명);
-        var modalContent = '<p>' + 구명 + ' 서점 개수: ' + 서점개수 + '</p>';
-        $('#modalContent').html(modalContent);
-        $('#myModal').modal('show');
-    }
-
-    // 'Back to Main Map' 버튼 클릭 시 이벤트 처리
-    $('#backButton').click(function() {
-        $('#seoulMapContainer').hide();
-        $('#mapContainer').show();
-    });
-});
-</script>
-
-{% endblock %}
+        function destroyChart(canvasId) {
+            var chartInstance = Chart.getChart(canvasId);
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+        }
+    </script>
+</body>
+</html>

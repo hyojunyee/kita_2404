@@ -1,24 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
 /* Base General styles */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
+    background-image: url('../img/background.jpeg');
+    background-size: cover; /* 배경 이미지를 화면에 꽉 채우도록 설정 */
+    background-repeat: no-repeat; /* 이미지 반복 없앰 */
+    background-attachment: fixed; /* 스크롤 시 배경 이미지가 움직이지 않도록 고정 */
+    background-position: center center; /* 배경 이미지를 가운데 정렬 */
+    font-family: 'NotoSansKR', sans-serif;
+    font-size: 15px;
+    word-break: break-word;
+    overflow-x: hidden;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    color: #000;
+    text-align: left;
 }
 
 header {
-    background-color: #333;
-    color: #fff;
+    background-color: transparent; /* 헤더의 배경을 투명하게 설정 */
+    color: #fff; /* 글자색을 흰색으로 설정 */
     padding: 20px;
     text-align: center;
 }
 
 header nav {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: flex-end; */
     align-items: center;
     padding: 0 20px;
-    justify-content: center;
+}
+
+header nav ul.menu {
+    
+    list-style-type: none;
+    padding: 10px;
+    border-radius: 10px; /* 네비게이션 바에 둥근 모서리 추가 */
+}
+
+header nav ul.menu li.menu-item {
+    background-color: rgba(255, 255, 255, 0.274);
+    display: inline-block;
+    margin-left: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+header nav ul.menu li.menu-item a.menu-link {
+    color: #333; /* 링크의 글자색을 검정색으로 설정 */
+    text-decoration: none;
+    padding: 10px;
+}
+
+header nav ul.menu li.menu-item a.menu-link:hover {
+    color: #fff; /* 링크에 마우스를 올렸을 때 글자색을 흰색으로 변경 */
 }
 
 .menu {
@@ -44,6 +79,8 @@ header nav {
 
 .menu-link:hover {
     background-color: #555;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px 10px 10px 10px;
 }
 
 .submenu {
@@ -53,24 +90,21 @@ header nav {
     left: 0;
     background-color: #333;
     list-style-type: none;
-    padding: 0;
+    padding: 10px; /* 서브메뉴 안쪽 여백 추가 */
     width: auto; /* 서브메뉴 너비 자동 조절 */
-    min-width: 300px; /* 최소 너비 설정 (옵션) */
+    min-width: 170px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
     z-index: 3; /* 서브메뉴의 z-index를 설정하여 메인 메뉴 위에 표시 */
-}
-
-.submenu li {
-    border-bottom: 1px solid #555;
+    border-radius: 10px 10px 10px 10px; /* 하단 부분의 테두리를 둥글게 설정 */
 }
 
 .submenu li a {
     display: block;
-    padding: 5px;
+    padding: 8px 12px;
     color: white;
     text-decoration: none;
-    font-size: 20px;
-    font-weight: 100; /* 폰트 얇게 설정 */
+    font-size: 18px;
+    font-weight: 300; /* 폰트 얇게 설정 */
 }
 
 .submenu li a:hover {
@@ -119,6 +153,7 @@ header nav {
     font-size:32px;
     font-weight: bold;
     position: relative;
+    border-radius: 10px 10px 10px 10px;
 }
 
 .menu-box img {
@@ -146,6 +181,7 @@ header nav {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 /* publihser_service - select_box */
 #resultContainer {
     margin-top: 20px;
@@ -174,7 +210,7 @@ header nav {
 #submitButton {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #919191;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -182,27 +218,26 @@ header nav {
 }
 
 #sumitButton:hover {
-    background-color: #0056b3;
+    background-color: #696969;
 }
 
-
-#backButton, #submitBtn {
+#backButton, #submitBtn, #seoulMapButton {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #919191;
     color: #fff;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-#backButton:hover, #submitBtn:hover {
-    background-color: #0056b3;
+#backButton:hover, #submitBtn:hover, #seoulMapButton:hover {
+    background-color: #696969;
 }
 
 /* Base General style - footer */
 footer {
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.5);
     color: #fff;
     text-align: center;
     padding: 10px 0;
@@ -213,7 +248,7 @@ footer {
 
 /* 문의 사항 섹션 */
 .section-container {
-    width: 80%;
+    width: 100%;
     margin: auto;
     margin-top: 100px;
     border: 1px solid #ccc;
@@ -231,7 +266,7 @@ footer {
 }
 
 .add-button {
-    background-color: #007bff;
+    background-color: #919191;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -240,7 +275,7 @@ footer {
 }
 
 .add-button:hover {
-    background-color: #0056b3;
+    background-color: #696969;
 }
 
 .task-list {
@@ -280,7 +315,7 @@ footer {
 
 .project-section {
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #ccc;
 }
 
 .project-title {
@@ -320,11 +355,20 @@ footer {
 .recommendation-intro h1 {
     color: #333;
     margin-bottom: 15px;
+    display: inline-block;
+    background-color: rgb(255 255 255 / 81%);
+    border-radius: 10px 10px 10px 10px;
+    padding: 10px;
+    font-weight: 600;
 }
-
 .recommendation-intro p {
     font-size: 1.2em;
     color: #666;
+    display: inline-block;
+    background-color: rgb(255 255 255 / 81%);
+    border-radius: 10px 10px 10px 10px;
+    padding: 4px;
+    font-weight: 600;
 }
 
 .recommendation-form-container {
@@ -410,36 +454,45 @@ footer {
     overflow-y: auto; /* 사이드바 길어질 때 스크롤바 표시 */
     border-right: 1px solid #dee2e6; /* 사이드바 우측에 경계선 추가 */
 }
+
 .content {
     margin-left: 280px;
     padding: 20px;
     width: calc(100% - 280px);
 }
+
 .sidebar .nav-link {
     font-size: 1.2rem;
     margin-bottom: 10px;
     color: #212529; /* 링크 색상 */
     cursor: pointer; /* 포인터 커서 */
 }
+
 .sidebar .nav-link:hover {
     background-color: #e9ecef; /* 링크 호버 배경색 */
 }
+
 .sidebar .nav-item {
     margin-bottom: 15px;
 }
+
 .sidebar .nav-item:last-child {
     margin-bottom: 0;
 }
+
 .collapse-item {
     padding-left: 20px;
 }
+
 .filter-label {
     font-weight: bold;
     color: #6c757d; /* 필터 레이블 색상 */
 }
+
 .link-body-emphasis {
     color: #0d6efd; /* 링크 강조 색상 */
 }
+
 .link-body-emphasis:hover {
     text-decoration: none; /* 링크 호버 시 밑줄 제거 */
 }
@@ -456,7 +509,6 @@ footer {
     display: block; /* 인라인 요소를 블록 요소로 변환 */
 }
 
-
 /* customer_info - map style */
 #map {
     height: 800px;
@@ -466,6 +518,7 @@ footer {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
 .legend {
     position: absolute;
     top: 20%;
@@ -496,8 +549,6 @@ footer {
     margin-right: 5px;
 }
 
-
-
 /* 지역별, 서울시 서점 지도 스타일 */
 #mapContainer, #seoulMapContainer {
     display: flex;
@@ -508,11 +559,12 @@ footer {
     height: 100%;
     z-index: 2;
 }
+
 #map, #seoulMap {
     margin: 0 auto; /* 가운데 정렬 */
     justify-content: center; /* 세로로 가운데 정렬 */
     width: 50%;
-    height: 100%;
+    height: 50%;
 }
 
 #backButton {
@@ -521,11 +573,6 @@ footer {
     right: 10px;
     z-index: 1000;
 }
-
-#modalMap {
-    height: 50px;
-}
-
 .project-description {
     display: flex;
     flex-wrap: wrap;
@@ -551,9 +598,87 @@ footer {
     margin-right: 20px; /* 그림과 텍스트 사이의 간격을 조정 */
 }
 
-/* ------------------------------------------------------------- */
+/* publihser_service.html modal창 */
+#modalTitle {
+    font-size: 24px; /* 글자 크기 */
+    font-weight: bold; /* 글자 굵기 */
+    margin-bottom: 50px; /* 아래쪽 간격 */
+}
+
+.modalFont {
+    font-size: 15px; /* 글자 크기 */
+}
+
+.chartContainer {
+    margin-bottom: 30px; /* 컨테이너 아래 간격 */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#myModal .modal-content {
+    background-color: white;
+    top: -300px;
+    width: 50%;
+    height: 90%;
+}
+
+/* index.html 이미지 */
 .central-image {
     width: 150px; /* 그림의 너비를 조절 */
     height: auto; /* 이미지의 높이를 자동 조절 */
-    margin-bottom: 200px; /* 아래쪽 간격 추가 */
+}
+
+/* 로고 스타일 */
+.logo {
+    display: inline-block;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.0); /* 로고 배경색과 투명도 설정 */
+    border-radius: 50%; /* 로고 배경을 둥글게 만듦 */
+}
+
+.logo img {
+    width: 400px;      /* 너비를 자동으로 조절하여 비율 유지 */
+    height: 100px;     /* 높이를 자동으로 조절하여 비율 유지 */
+}
+.text-center {
+    text-align: center !important;
+    color: #333;
+    margin-bottom: 15px;
+    display: inline-block;
+    background-color: rgb(255 255 255 / 81%);
+    border-radius: 10px 10px 10px 10px;
+    padding: 10px;
+    font-weight: 600;
 }

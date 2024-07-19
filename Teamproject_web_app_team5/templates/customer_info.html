@@ -50,73 +50,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<script>
+<script>    
     var map = L.map('map').setView([36.5, 127.5], 7);
-    
+    var markers = [];
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var markers = []; // 마커를 담을 배열
     var genderChart; // 성별 인구 비율 차트
     var ageDistributionChart; // 연령대별 인구 분포 차트
     var seoulPopulationData = {};
-
-        // 서울의 각 구의 중심 좌표 및 이름
-    var seoulDistricts = [
-        { name: '강남구', center: [37.5172, 127.0473] },
-        { name: '강북구', center: [37.6396, 127.0257] },
-        { name: '강동구', center: [37.5301, 127.1238] },
-        { name: '강서구', center: [37.5658, 126.8225] },
-        { name: '관악구', center: [37.4784, 126.9516] },
-        { name: '광진구', center: [37.5420, 127.0838] },
-        { name: '구로구', center: [37.4954, 126.8874] },
-        { name: '금천구', center: [37.4601, 126.9000] },
-        { name: '노원구', center: [37.6552, 127.0773] },
-        { name: '도봉구', center: [37.6688, 127.0471] },
-        { name: '동대문구', center: [37.5744, 127.0396] },
-        { name: '동작구', center: [37.5125, 126.9395] },
-        { name: '마포구', center: [37.5665, 126.9010] },
-        { name: '서대문구', center: [37.5791, 126.9368] },
-        { name: '서초구', center: [37.4837, 127.0324] },
-        { name: '성동구', center: [37.5635, 127.0365] },
-        { name: '성북구', center: [37.6065, 127.0276] },
-        { name: '송파구', center: [37.5145, 127.1070] },
-        { name: '양천구', center: [37.5270, 126.8560] },
-        { name: '영등포구', center: [37.5208, 126.9134] },
-        { name: '용산구', center: [37.5327, 126.9904] },
-        { name: '은평구', center: [37.6176, 126.9227] },
-        { name: '종로구', center: [37.5720, 126.9840] },
-        { name: '중구', center: [37.5639, 126.9975] },
-        { name: '중랑구', center: [37.6065, 127.0927] }
-    ];
-
-    // 서울 구의 마커 생성 및 이벤트 처리
-    seoulDistricts.forEach(district => {
-        var marker = L.marker(district.center, { opacity: 1 }).addTo(map); // 초기 opacity는 1로 설정
-        marker.bindPopup('<b>' + district.name + '</b>');
-        marker.on({
-            mouseover: function (e) {
-                marker.setOpacity(0.5); // 마우스 오버 시 opacity 조절
-            },
-            mouseout: function (e) {
-                marker.setOpacity(1); // 마우스 아웃 시 다시 원래 opacity로 복원
-            },
-            click: function (e) {
-                var popup = L.popup()
-                    .setLatLng(district.center)
-                    .setContent(createPopupContent(district.name))
-                    .openOn(map);
-
-                // 팝업이 열린 후 차트 생성
-                setTimeout(function () {
-                    createPopupChart(district.name);
-                }, 100);
-            }
-        });
-        markers.push(marker);
-    });
 
     $.ajax({
     url: 'static/population(seoul).csv',
@@ -136,29 +80,8 @@
             }
         });
         
-        // CSV 로드 후 마커 생성
-        createSeoulMarkers();
-        // 초기 줌 레벨에 따라 마커 숨기기/보이기
-        updateMarkerVisibility();
     }
 });
-function createSeoulMarkers() {
-    seoulDistricts.forEach(district => {
-        var marker = L.marker(district.center).addTo(map);
-        marker.on('click', function() {
-            var popup = L.popup()
-                .setLatLng(district.center)
-                .setContent(createPopupContent(district.name))
-                .openOn(map);
-            
-            // 팝업이 열린 후 차트 생성
-            setTimeout(function() {
-                createPopupChart(district.name);
-            }, 100);
-        });
-        markers.push(marker);
-    });
-}
 
 function updateMarkerVisibility() {
     var currentZoom = map.getZoom();
@@ -239,7 +162,7 @@ function createPopupChart(districtName) {
     // GeoJSON 데이터 가져오기
     $.ajax({
         dataType: "json",
-        url: "/geojson",
+        url: "/static/TL_SCCO_CTPRVN.json",
         success: function(data) {
             L.geoJSON(data, {
                 style: function(feature) {
@@ -274,44 +197,6 @@ function createPopupChart(districtName) {
             }).addTo(map);
         }
     });
-
-    // 서울 구 경계 GeoJSON 데이터 추가
-    $.ajax({
-        dataType: "json",
-        url: "/static/Seoul_Gu.json",
-        success: function(data) {
-            L.geoJSON(data, {
-                style: function(feature) {
-                    return {
-                        color: "#FF0000", // 경계선 색상 설정
-                        weight: 2, // 경계선 두께 설정
-                        fillOpacity: 0 // 채우기 투명도 설정
-                    };
-                },
-                onEachFeature: function(feature, layer) {
-                    // 마우스 오버 이벤트 처리
-                    layer.on({
-                        mouseover: function(e) {
-                            var layer = e.target;
-                            layer.setStyle({
-                                fillColor: 'blue', // 마우스 오버 시 채우기 색상
-                                fillOpacity: 0.5 // 마우스 오버 시 채우기 투명도
-                            });
-                        },
-                        mouseout: function(e) {
-                            var layer = e.target;
-                            layer.setStyle({
-                                fillColor: getColor(getPopulation(feature.properties.GU_NAME)), // 마우스가 떠나면 원래 인구에 따른 색상으로 복구
-                                fillOpacity: 0.7 // 원래 채우기 투명도로 복구
-                            });
-                        }
-                    });
-                }
-            }).addTo(map);
-        }
-    });
-
-
 
     // 특정 지역의 인구수 가져오기
     function getPopulation(regionName) {
