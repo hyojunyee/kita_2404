@@ -14,6 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect  # Web Templates Form
 from flask_uploads import UploadSet, configure_uploads, ALL
+from flask_paginate import Pagination, get_page_args
 from datetime import datetime
 import pytz
 import os
@@ -128,10 +129,25 @@ def index():
 def task_list():
     if "user_id" not in session:
         return redirect(url_for("login"))
-    tasks = Task.query.filter_by(user_id=session["user_id"]).all()
-    current_date = datetime.utcnow().date()  # 현재 날짜를 설정합니다.
+
+    # Get the page number from the URL
+    page = request.args.get('page', type=int, default=1)
+    search = request.args.get('search', type=str, default='')
+    per_page = 5  # Number of items per page
+    
+    # Query for the tasks
+    tasks_query = Task.query.filter_by(user_id=session["user_id"])
+    
+    # If there's a search query, filter the tasks
+    if search:
+        tasks_query = tasks_query.filter(Task.title.ilike(f'%{search}%'))
+
+    # Paginate the tasks
+    tasks = tasks_query.order_by(Task.due_date.desc()).paginate(page=page, per_page=per_page, error_out=False)
+
+    current_date = datetime.utcnow().date()
     tasks_with_info = []
-    for task in tasks:
+    for task in tasks.items:
         task_info = {
             "id": task.id,
             "title": task.title,
@@ -141,7 +157,7 @@ def task_list():
             "completion_date": task.completion_date,
             "days_remaining": None,
             "status": "미완료",
-            "file_path": task.file_path,  # 파일 경로 추가
+            "file_path": task.file_path,
         }
         if task.completion_date:
             days_remaining = (task.due_date - task.completion_date).days
@@ -153,7 +169,6 @@ def task_list():
             else:
                 task_info["status"] = f"마감일 초과: {abs(days_remaining)}일"
         else:
-            # 마감일과 현재 날짜를 비교하여 상태 설정
             days_remaining = (task.due_date - current_date).days
             task_info["days_remaining"] = days_remaining
             if days_remaining >= 0:
@@ -161,8 +176,15 @@ def task_list():
             else:
                 task_info["status"] = "기한 초과"
         tasks_with_info.append(task_info)
+
+    pagination = Pagination(page=page, total=tasks.total, per_page=per_page, search=search, record_name='tasks')
+
     return render_template(
-        "task_list.html", tasks=tasks_with_info, current_date=current_date
+        "task_list.html",
+        tasks=tasks_with_info,
+        current_date=current_date,
+        pagination=pagination,
+        search=search
     )
 
 
