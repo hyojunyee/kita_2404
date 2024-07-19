@@ -13,6 +13,18 @@ import json
 import pandas as pd
 from utils import get_book_recommendations
 import csv
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from io import BytesIO
+from matplotlib import gridspec
+import base64
+import matplotlib.font_manager as fm
+
+# 한글 폰트 경로를 지정하세요 (예: 나눔고딕)
+font_path = 'static/NanumBarunGothic.ttf'  
+font_prop = fm.FontProperties(fname=font_path)
+plt.rcParams['font.family'] = font_prop.get_name()
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
@@ -172,5 +184,7 @@ def bookstore_data():
 
 
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+    
