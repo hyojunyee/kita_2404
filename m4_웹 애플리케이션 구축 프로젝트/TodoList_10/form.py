@@ -8,7 +8,7 @@ from wtforms import (
     BooleanField,
     SubmitField,
 )
-from wtforms.validators import DataRequired, Email, EqualTo, Optional
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
 
 
 class TaskForm(FlaskForm):
@@ -17,7 +17,7 @@ class TaskForm(FlaskForm):
     due_date = DateField("Due Date", validators=[DataRequired()])
     completion_date = DateField(
         "Completion Date", validators=[Optional()]
-    )
+    )  # 새로운 필드
     file = FileField("File")
     submit = SubmitField("Submit")
 
@@ -56,4 +56,4 @@ class UpdateProfileForm(FlaskForm):
     confirm_password = PasswordField(
         "Confirm Password", validators=[EqualTo("password")]
     )
-    submit = SubmitField("Update")
+    submit = SubmitField("Submit")

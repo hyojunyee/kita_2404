@@ -28,7 +28,8 @@ from config import Config
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
-app.config.from_object(Config) # Config 클래스를 사용하여 설정을 로드
+app.config.from_object(Config)  # Config 클래스를 사용하여 설정을 로드합니다
+
 
 db.init_app(app)
 migrate = Migrate(app, db)
@@ -38,9 +39,11 @@ csrf = CSRFProtect(app)
 files = UploadSet("files", ALL)
 configure_uploads(app, files) # flask application과 UploadSet을 연결
 
+
 # Jinja2 템플릿 필터 정의
 def todate(value, format="%Y-%m-%d"):
     return datetime.strptime(value, format).date()
+
 
 app.jinja_env.filters["todate"] = todate
 
@@ -49,7 +52,7 @@ app.jinja_env.filters["todate"] = todate
 def create_admin():
     if not User.query.filter_by(username="admin").first():
         admin_user = User(username="admin", email="admin@example.com", is_admin=True)
-        admin_user.set_password("admin")
+        admin_user.set_password("admin_password")
         db.session.add(admin_user)
         db.session.commit()
 
@@ -112,7 +115,7 @@ def login():
 @app.route("/logout")
 def logout():
     session.clear()
-    # flash("You have been logged out.", "success")
+    flash("You have been logged out.", "success")
     return redirect(url_for("login"))
 
 
@@ -138,7 +141,7 @@ def task_list():
             "completion_date": task.completion_date,
             "days_remaining": None,
             "status": "미완료",
-            "file_path": task.file_path, # 파일 경로 추가
+            "file_path": task.file_path,  # 파일 경로 추가
         }
         if task.completion_date:
             days_remaining = (task.due_date - task.completion_date).days
@@ -163,7 +166,7 @@ def task_list():
     )
 
 
-@app.route("/add_task", methods=["POST"])
+@app.route("/add_task", methods=["GET", "POST"])
 def add_task():
     if "user_id" not in session:
         return redirect(url_for("login"))
@@ -180,7 +183,6 @@ def add_task():
         completion_date = (
             form.completion_date.data if form.completion_date.data else None
         )
-
         new_task = Task(
             title=title,
             contents=contents,
@@ -189,7 +191,7 @@ def add_task():
             completion_date=completion_date,
             user_id=session["user_id"],
         )
-        
+
         # 파일 업로드 처리
         if form.file.data and isinstance(form.file.data, FileStorage):
             filename = files.save(form.file.data)
@@ -199,7 +201,7 @@ def add_task():
         flash("Task added successfully!", "success")
         return redirect(url_for("task_list"))
     csrf_token = form.csrf_token._value()
-    return render_template("index.html", form=form, csrf_token=csrf_token)
+    return render_template("add_task.html", form=form, csrf_token=csrf_token)
 
 
 @app.route("/edit/<int:task_id>", methods=["GET", "POST"])
@@ -220,27 +222,26 @@ def edit_task(task_id):
         )
         # 파일 업로드 처리
         if form.file.data and isinstance(form.file.data, FileStorage):
-            # 기존파일 삭제
+            # 기존 파일 삭제
             if task.file_path:
                 file_path = os.path.join(
-                    app.config["UPLOADED_FILE_PATH"], task.file_path
+                    app.config["UPLOADED_FILES_DEST"], task.file_path
                 )
                 if os.path.exists(file_path):
                     os.remove(file_path)
             # 새 파일 저장
             filename = files.save(form.file.data)
             task.file_path = filename
-        
+
         # 기존 파일 삭제 체크박스 처리
         if "remove_file" in request.form:
             if task.file_path:
                 file_path = os.path.join(
-                    app.config["UPLOADED_FILE_DEST"], task.file_path
-                    )
+                    app.config["UPLOADED_FILES_DEST"], task.file_path
+                )
                 if os.path.exists(file_path):
                     os.remove(file_path)
-            task.file_path = None
-            
+                task.file_path = None
         db.session.commit()
         flash("Task edited successfully!", "success")
         return redirect(url_for("task_list"))
@@ -252,7 +253,6 @@ def edit_task(task_id):
     return render_template(
         "edit_task.html",
         form=form,
-        # task_id=task.id,
         csrf_token=csrf_token,
         task=task,  # 여기에 task 변수를 추가합니다.
         current_date=current_date,  # 현재 날짜를 템플릿으로 전달
@@ -276,7 +276,7 @@ def delete_task(task_id):
     flash("Task deleted successfully!", "success")
     return redirect(url_for("task_list"))
 
-
+# send_from_directory : 지정된 디렉토리에서 파일을 찾아 전송
 @app.route("/download/<filename>")
 def download_file(filename):
     if "user_id" not in session:
@@ -285,7 +285,7 @@ def download_file(filename):
     if os.path.exists(file_path):
         return send_from_directory(app.config["UPLOADED_FILES_DEST"], filename)
     else:
-        flash("File not found", "danger")
+        flash("File not found.", "danger")
         return redirect(url_for("task_list"))
 
 
@@ -398,6 +398,7 @@ def delete_user(user_id):
     flash("User deleted successfully!", "success")
     return redirect(url_for("admin"))
 
+
 # 과제 준수 분석 경로 추가
 @app.route("/admin/analysis")
 def admin_analysis():
@@ -418,9 +419,16 @@ def admin_analysis():
         tasks_overdue = sum(
             1
             for task in tasks
-            if task.completion_date
-            and task.due_date
-            and task.completion_date > task.due_date
+            if (
+                task.completion_date
+                and task.due_date
+                and task.completion_date > task.due_date
+            )
+            or (
+                not task.completion_date
+                and task.due_date
+                and task.due_date < current_date
+            )
         )
         compliance_rate = (tasks_on_time / total_tasks * 100) if total_tasks > 0 else 0
 
@@ -435,6 +443,7 @@ def admin_analysis():
         )
 
     return render_template("admin_analysis.html", user_analysis=user_analysis)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

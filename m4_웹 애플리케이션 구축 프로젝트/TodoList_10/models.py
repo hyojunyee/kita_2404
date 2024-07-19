@@ -25,9 +25,7 @@ class Task(db.Model):
     contents = db.Column(db.Text, nullable=False)
     input_date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
     due_date = db.Column(db.Date, nullable=False)
-    completion_date = db.Column(db.Date, nullable=True) # 새로운 필드 추가
+    completion_date = db.Column(db.Date, nullable=True)  # 새로운 필드 추가
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    file_path = db.Column(db.String(256), nullable=True) # 새로운 속성 추가
-    user = db.relationship(
-        "User", backref=db.backref("tasks", lazy=True, cascade="all, delete-orphan")
-    )
+    file_path = db.Column(db.String(256), nullable=True)  # 새로운 속성 추가
+    user = db.relationship("User", backref=db.backref("tasks", lazy=True, cascade="all, delete-orphan"))

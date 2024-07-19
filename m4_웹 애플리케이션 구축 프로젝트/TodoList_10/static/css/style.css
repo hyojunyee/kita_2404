@@ -10,12 +10,16 @@ body {
 
 /* 첫 페이지에만 배경 이미지 적용 */
 .home-background {
-  background: url("/static/images/bg2.png") no-repeat center center fixed;
+  background: url("/static/images/bg1.png") no-repeat center center fixed;
   background-size: cover;
   flex: 1;
 }
 
 /* 네비게이션 바 스타일 */
+.navbar {
+  z-index: 1;
+}
+
 .navbar-brand {
   font-weight: bold;
   font-size: 1.5em; /* 글자 크기 조정 */
