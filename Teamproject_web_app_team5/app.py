@@ -31,9 +31,9 @@ app.config.from_pyfile("config.py")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'  # SQLite 데이터베이스 설정
 
 db = SQLAlchemy(app)
-csv_file = 'static/population.csv'
-geojson_file = 'static/TL_SCCO_CTPRVN.json'
-book_csv_file = 'static/book_store.csv'
+csv_file_seoul = 'static/population(seoul).csv'
+csv_file_districts = 'static/population.csv'
+geojson_file = 'static/mix.json'
 
 # Task 모델 정의
 class Task(db.Model):
@@ -156,14 +156,12 @@ def delete_task(task_id):
 
 
 # 데이터프레임으로 CSV 파일 로드
-df = pd.read_csv(csv_file, encoding='utf-8')
+df_districts = pd.read_csv(csv_file_districts, encoding='utf-8')
+df_seoul = pd.read_csv(csv_file_seoul, encoding='utf-8')
+
 # GeoJSON 파일 로드
 with open(geojson_file, encoding='utf-8') as f:
     geojson_data = json.load(f)
-
-@app.route('/ttt')
-def ttt():
-    return render_template('ttt.html')
 
 #  지도, 인구수 데이터 불러오기
 @app.route('/geojson')
@@ -172,18 +170,17 @@ def get_geojson():
 
 @app.route('/population')
 def get_population():
-    return jsonify(df.to_dict(orient='records'))
+    return jsonify(df_districts.to_dict(orient='records'))
 
-# 서점 데이터 불러오기
-with open('static/book_store.json', 'r', encoding='utf-8') as f:
-    book_store_data = json.load(f)
+@app.route('/seoul_population')
+def seoul_population():
+    return jsonify(df_seoul.to_dict(orient='records'))
 
-@app.route('/bookstoredata')
-def bookstore_data():
-    return jsonify(book_store_data)
-
-
-
+@app.route('/seoul_total_population')
+def seoul_total_population():
+    df_seoul = pd.read_csv('seoul_population.csv')  # 서울시 지역별 인구수 데이터 읽기
+    total_population = df_seoul['인구수'].sum()  # 총 인구수 계산
+    return jsonify({'total_population': total_population})
 
 if __name__ == '__main__':
     app.run(debug=True)
