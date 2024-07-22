@@ -1,152 +1,3 @@
-{% extends "base.html" %}
-
-{% block title %}
-책사이트 이름 - 홈
-{% endblock %}
-
-{% block content %}
-<main class="main-content">
-    <details>
-        <summary class="menu-box" data-target="ageOptions">
-            <img src="{{ url_for('static', filename='image1.png') }}" alt="연령대 아이콘">
-            연령대
-        </summary>
-        <div class="options-container" id="ageOptions">
-            <select id="age-select">
-                <option value="">선택</option>
-                <option value="10">10대</option>
-                <option value="20">20대</option>
-                <option value="30">30대</option>
-                <option value="40">40대</option>
-                <option value="50">50대</option>
-                <option value="60">60대</option>
-            </select>
-        </div>
-    </details>
-    
-    <details>
-        <summary class="menu-box" data-target="catOptions">
-            <img src="{{ url_for('static', filename='image2.png') }}" alt="카테고리 아이콘">
-            카테고리
-        </summary>
-        <div class="options-container" id="catOptions">
-            <select id="cat-select">
-                <option value="">선택</option>
-                <option value="가정과 살림">가정과 살림</option>
-                <option value="자연과학">자연과학</option>
-                <option value="만화/라이트노벨">만화/라이트노벨</option>
-                <option value="역사">역사</option>
-                <option value="건강 취미">건강 취미</option>
-                <option value="인문">인문</option>
-                <option value="경제 경영">경제 경영</option>
-                <option value="자기계발">자기계발</option>
-                <option value="유아">유아</option>
-                <option value="소설/시/희곡">소설/시/희곡</option>
-            </select>
-        </div>
-    </details>
-    
-    <details>
-        <summary class="menu-box" data-target="sexOptions">
-            <img src="{{ url_for('static', filename='image3.png') }}" alt="성별 아이콘">
-            성별
-        </summary>
-        <div class="options-container" id="sexOptions">
-            <select id="sex-select">
-                <option value="">선택</option>
-                <option value="남성">남성</option>
-                <option value="여성">여성</option>
-            </select>
-        </div>
-    </details>
-
-</main>
-
-<!-- 연령대 모달 -->
-<div id="ageModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('ageModal')">&times;</span>
-        <h2 id="ageModalTitle">연령대별 독자 분석</h2>
-        <div class="modal-body">
-            <div class="chartContainer">
-                <h2 id="ageRatioTitle" class="modalFont"></h2>
-                <canvas id="ageRatioChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="genderRatioTitle" class="modalFont"></h2>
-                <canvas id="genderRatioChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="topCategoriesTitle" class="modalFont"></h2>
-                <canvas id="topCategoriesChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="pageLengthTitle" class="modalFont"></h2>
-                <canvas id="pageLengthChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="priceRangeTitle" class="modalFont"></h2>
-                <canvas id="priceRangeChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 카테고리 모달 -->
-<div id="categoryModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('categoryModal')">&times;</span>
-        <h2 id="categoryModalTitle">카테고리별 독자 분석</h2>
-        <div class="modal-body">
-            <div class="chartContainer">
-                <h2 id="categoryMonthlyPublishTitle" class="modalFont"></h2>
-                <canvas id="categoryMonthlyPublishChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="categoryAgePreferenceTitle" class="modalFont"></h2>
-                <canvas id="categoryAgePreferenceChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="categoryGenderPreferenceTitle" class="modalFont"></h2>
-                <canvas id="categoryGenderPreferenceChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 성별 모달 -->
-<div id="genderModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('genderModal')">&times;</span>
-        <h2 id="genderModalTitle">성별별 독자 분석</h2>
-        <div class="modal-body">
-            <div class="chartContainer">
-                <h2 id="genderAgeSalesIndexTitle" class="modalFont"></h2>
-                <canvas id="genderAgeSalesIndexChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="genderCategoryPreferenceTitle" class="modalFont"></h2>
-                <canvas id="genderCategoryPreferenceChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="genderPriceRangePreferenceTitle" class="modalFont"></h2>
-                <canvas id="genderPriceRangePreferenceChart"></canvas>
-            </div>
-            <div class="chartContainer">
-                <h2 id="genderPageLengthPreferenceTitle" class="modalFont"></h2>
-                <canvas id="genderPageLengthPreferenceChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    // 전역 변수와 초기 설정
 var bookData = [];  
 
 $(document).ready(function() {
@@ -167,27 +18,34 @@ $(document).ready(function() {
     
     // 옵션 선택 이벤트 핸들링
     $('#age-select').on('change', function() {
-            generateInsights('age', this.value);
-        });
-
-        $('#cat-select').on('change', function() {
-            generateInsights('category', this.value);
-        });
-
-        $('#sex-select').on('change', function() {
-            generateInsights('gender', this.value);
-        });
+        showResult(`연령대 선택: ${this.value}`);
+        generateInsights(this.value);
+        console.log()
     });
 
-function showModal(modalId) {
-        $('.modal').hide();
-        $('#' + modalId).show();
-    }
+    $('#cat-select').on('change', function() {
+        showResult(`카테고리 선택: ${this.value}`);
+        generateInsights(this.value);
+    });
 
-    function closeModal(modalId) {
-        $('#' + modalId).hide();
-        location.reload();
-    }
+    $('#sex-select').on('change', function() {
+        showResult(`성별 선택: ${this.value}`);
+        generateInsights(this.value);
+    });
+
+});
+
+// 모달 결과창 생성
+function showResult(resultText) {
+    $('#resultContainer').show();
+    $('#result').text(resultText);
+}
+
+// 모달 닫기 버튼 클릭 시 이벤트 핸들링
+$('.close').on('click', function() {
+    $('#myModal').hide();  // 모달 숨기기
+    location.reload();     // 페이지 새로고침
+});
 
 function parseData(data) {
     var lines = data.trim().split('\n');
@@ -224,19 +82,25 @@ function parseData(data) {
     return parsedData;
 }
 
-function generateInsights(type, value) {
-        if (type === 'age') {
-            generateAgeInsights(value);
-            showModal('ageModal');
-        } else if (type === 'category') {
-            generateCategoryInsights(value);
-            showModal('categoryModal');
-        } else if (type === 'gender') {
-            var genderCode = value === '남성' ? 0 : (value === '여성' ? 1 : undefined);
-            generateGenderInsights(genderCode);
-            showModal('genderModal');
-        }
+function generateInsights() {
+
+    var age = $('#age-select').val();
+    var category = $('#cat-select').val();
+    var gender = $('#sex-select').val();
+    var genderCode = gender === '남성' ? 0 : (gender === '여성' ? 1 : undefined);
+
+    if (age) {
+        generateAgeInsights(age);
     }
+    if (category) {
+        generateCategoryInsights(category);
+    }
+    if (genderCode !== undefined) {
+        generateGenderInsights(genderCode);
+    }
+
+    $('#myModal').show();
+}
 
 function generateAgeInsights(age) {
     var filteredData = bookData.filter(function(item) {
@@ -250,22 +114,22 @@ function generateAgeInsights(age) {
     var priceRangePreference = calculatePriceRangePreference(filteredData);
 
     $('#topCategoriesTitle').text(`${age}대가 선호하는 카테고리 TOP 5`);
-    $('#pageLengthTitle').text(`${age}대 독자들이 선호하는 책 길이`);
-    $('#priceRangeTitle').text(`${age}대 독자들이 선호하는 책의 가격`);
     $('#ageRatioTitle').text(`전체 독자 중 ${age}대 비율`);
     $('#genderRatioTitle').text(`${age}대 독자 남녀 비율`);
+    $('#pageLengthTitle').text(`${age}대 독자들이 선호하는 책 길이`);
+    $('#priceRangeTitle').text(`${age}대 독자들이 선호하는 책의 가격`);
 
     destroyChart('topCategoriesChart');
-    destroyChart('pageLengthChart');
-    destroyChart('priceRangeChart');
     destroyChart('ageRatioChart');
     destroyChart('genderRatioChart');
+    destroyChart('pageLengthChart');
+    destroyChart('priceRangeChart');
 
     drawBarChart('topCategoriesChart', preferences);
-    drawBarChart('pageLengthChart', pageLengthPreference);
-    drawBarChart('priceRangeChart', priceRangePreference);
     drawPieChart('ageRatioChart', ageRatio, `${age}대`);
     drawPieChart('genderRatioChart', genderRatio, `${age}대 독자 남녀 비율`);
+    drawBarChart('pageLengthChart', pageLengthPreference);
+    drawBarChart('priceRangeChart', priceRangePreference);
 }
 
 function generateCategoryInsights(category) {
@@ -413,24 +277,8 @@ function drawBarChart(canvasId, data) {
             datasets: [{
                 label: '판매 지수',
                 data: data.map(function(item) { return item.value; }),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(153, 102, 255, 0.5)',
-                    'rgba(255, 159, 64, 0.5)',
-                    // 필요에 따라 더 많은 색상을 추가할 수 있습니다
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    // 필요에 따라 더 많은 색상을 추가할 수 있습니다
-                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }]
         },
@@ -454,26 +302,16 @@ function drawPieChart(canvasId, data, title) {
             datasets: [{
                 label: title,
                 data: data.values,
-                backgroundColor: ['lightpink', 'lightblue'],
+                backgroundColor: ['lightblue', 'lightpink'],
                 borderColor: 'white',
                 borderWidth: 2
             }]
         },
         options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: {
-                        padding: {
-                            left: 20,
-                            right: 20,
-                            top: 20,
-                            bottom: 20
-                        }
-                    }
-                }
-            });
+            responsive: true
         }
-
+    });
+}
 
 function destroyChart(canvasId) {
     var chartInstance = Chart.getChart(canvasId);
@@ -645,7 +483,3 @@ function calculateGenderPreference(data) {
          };
      });
  }
-
-</script>
-
-{% endblock %}

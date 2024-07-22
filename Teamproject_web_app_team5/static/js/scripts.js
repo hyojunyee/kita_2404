@@ -27,41 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const sexSelect = document.getElementById("sex-select");
     const resultContainer = document.getElementById("resultContainer");
     const backButton = document.getElementById("backButton");
-    const submitBtn = document.getElementById("submitBtn");
-    const alertBox = document.querySelector(".alert");
-
       
-    ageSelect.addEventListener("change", function () {
-        const selectedAge = ageSelect.value;
-        showResult(`연령대 선택: ${selectedAge}`);
-      });
-
-    catSelect.addEventListener("change", function () {
-        const selectedCategory = catSelect.value;
-        showResult(`카테고리 선택: ${selectedCategory}`);
-    });
-
-    sexSelect.addEventListener("change", function () {
-        const selectedSex = sexSelect.value;
-        showResult(`성별 선택: ${selectedSex}`);
-    });
-
     // Function to display result
     function showResult(resultText) {
         resultContainer.style.display = "block";
         document.getElementById("result").innerHTML = resultText;
     }
-
-    // submit button - publisher_servidce
-    submitBtn.addEventListener("click", function () {
-        alertBox.style.display = "block";
-        resultContainer.style.display = "none";
-    })
-
-    // Back button - 
-    backButton.addEventListener("click", function () {
-        resultContainer.style.display = "none";
-    });
 
 
     // Function to toggle options container
@@ -74,26 +45,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // publisher_service 부분
 document.addEventListener("DOMContentLoaded", function () {
-  const submitBtn = document.getElementById("submitBtn");
   const modal = document.getElementById("myModal");
   const span = document.getElementsByClassName("close")[0];
-
-  submitBtn.addEventListener("click", function () {
-      modal.style.display = "block"; // 모달을 보이도록 설정
-  });
-
-  span.addEventListener("click", function () {
-      modal.style.display = "none"; // 모달을 숨기도록 설정
-  });
-
-  window.addEventListener("click", function (event) {
-      if (event.target === modal) {
-          modal.style.display = "none"; // 모달 외부 클릭 시 모달을 숨기도록 설정
-      }
-  });
-});
-
-
-document.getElementById('submitBtn').addEventListener('click', function() {
-  generateInsights();
 });
