@@ -1,4 +1,4 @@
-python 가상환경 설정
+## python 가상환경 설정
 
 python 버전확인:
 python --version
