@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 추천 시스템</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; }
+        form { display: flex; flex-direction: column; gap: 10px; }
+        input, button { padding: 10px; }
+        #results { margin-top: 20px; }
+        .movie { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>하이브리드 영화 추천 시스템</h1>
+    <form id="recommendForm">
+        <input type="number" id="userId" placeholder="사용자 ID" required>
+        <input type="number" id="numRecommendations" placeholder="추천 받을 영화 수" required>
+        <button type="submit">추천 받기</button>
+    </form>
+    <div id="results"></div>
+
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalGenres"></p>
+            <p id="modalScore"></p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#recommendForm').submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/recommend',
+                    method: 'POST',
+                    data: {
+                        user_id: $('#userId').val(),
+                        n: $('#numRecommendations').val()
+                    },
+                    success: function(response) {
+                        let results = $('#results');
+                        results.empty();
+                        results.append('<h2>추천 영화 목록</h2>');
+                        response.forEach(function(movie) {
+                            let movieDiv = $('<div class="movie"></div>');
+                            movieDiv.append(`<h3>${movie.title}</h3>`);
+                            movieDiv.append(`<p>장르: ${movie.genres}</p>`);
+                            movieDiv.append(`<p>추천 점수: ${movie.score}</p>`);
+                            movieDiv.click(function() {
+                                showMovieDetails(movie);
+                            });
+                            results.append(movieDiv);
+                        });
+                    }
+                });
+            });
+
+            function showMovieDetails(movie) {
+                $('#modalTitle').text(movie.title);
+                $('#modalGenres').text('장르: ' + movie.genres);
+                $('#modalScore').text('추천 점수: ' + movie.score);
+                $('#movieModal').css('display', 'block');
+            }
+
+            $('.close').click(function() {
+                $('#movieModal').css('display', 'none');
+            });
+
+            $(window).click(function(event) {
+                if (event.target == $('#movieModal')[0]) {
+                    $('#movieModal').css('display', 'none');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
